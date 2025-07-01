@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./.tsbuildinfo",
+    "incremental": true,
+    "target": "ES6",
+    "module": "CommonJS",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "strict": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "moduleResolution": "Node",
+    "paths": {
+      "@config/*": ["config/*"],
+      "@libs/*": ["libs/*"],
+      "@errors/*": ["errors/*"],
+      "@classes/*": ["classes/*"],
+      "@components/*": ["components/*"],
+      "@routes/*": ["routes/*"],
+      "@services/*": ["services/*"],
+      "@middlewares/*": ["middlewares/*"],
+      "@models/*": ["models/*"],
+      "@utils/*": ["utils/*"],
+      "@entities/*": ["entities/*"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["jest.config.ts", "dist", "node_modules"],
+  "typeRoots": ["./src/Types"]
+}

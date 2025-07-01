@@ -1,0 +1,22 @@
+{
+	"SERVER": {
+		"PORT": 3000,
+		"APP_ORIGIN_URL": "http://localhost:3000",
+		"ARTICLES_SERVICE_URL": "http://localhost:3001",
+		"LOGS_SERVICE_URL": "http://localhost:3002",
+		"SEARCH_SERVICE_URL": "http://localhost:3003"
+	},
+	"DATABASE": {
+		"PORT": 5432,
+		"HOST": "localhost",
+		"DIALECT": "postgres",
+		"NAME": "dbname"
+	},
+	"KAFKA": {
+		"HOST": "localhost",
+		"PORT": 29092,
+		"CLIENT": "course-service",
+		"ACTION_TOPIC": "action-logged",
+		"GROUP_ID": "group"
+	}
+}
