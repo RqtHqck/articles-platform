@@ -1,0 +1,13 @@
+services:
+
+  api-gateway:
+    container_name: api-gateway_articles-platform
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    env_file:
+      - ./api-gateway/config/.env
+    restart: unless-stopped
+
