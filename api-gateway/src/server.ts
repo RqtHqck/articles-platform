@@ -23,10 +23,15 @@ app
         origin: process.env.APP_ORIGIN_URL,
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
     }))
-    .use(rateLimitOptions);
+    // .use(rateLimitOptions);
 
-app.use('/articles',
+console.log(process.env.ARTICLES_SERVICE_URL)
+app.use('/api/articles',
     proxy(process.env.ARTICLES_SERVICE_URL!, {
+        proxyReqPathResolver: (req) => {
+            console.log("API-GATEWA -> " + req.url);
+            return req.url;
+        },
         proxyErrorHandler: (err, res, next) => {
             logger.info("Something went wrong when appeal to " + process.env.ARTICLES_SERVICE_URL!)
             next(err);

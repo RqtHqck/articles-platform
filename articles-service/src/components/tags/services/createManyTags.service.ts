@@ -1,6 +1,6 @@
 import logger from "@libs/logger";
 import {TagEnum} from "@entities/enums";
-import {Tag} from "@components/articles/models";
+import {Tag} from "@components/tags/models";
 import {ITag} from "@entities/interfaces";
 import {TTagCreation} from "@entities/types";
 

@@ -9,7 +9,7 @@ import compression from "compression";
 import helmet from "helmet";
 import cors from "cors";
 import {ErrorsHandlerMiddleware} from "@middlewares/ErrorHandler";
-import {appRouter, articlesRoutes} from "@routes/index"
+import { router } from "@routes/index"
 
 import '@libs/sequelize';
 import '@libs/kafka/kafka';
@@ -29,15 +29,7 @@ app
     }))
 
 // Routes
-app.use(appRouter);
-app.use(articlesRoutes);
-// Errors
-app.use(ErrorsHandlerMiddleware);
-
-
-// Routes
-app.use(appRouter);
-app.use(articlesRoutes);
+app.use(router);
 // Errors
 app.use(ErrorsHandlerMiddleware);
 

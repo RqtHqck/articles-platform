@@ -9,5 +9,9 @@ type TError = {
 type TErrorData = Record<string, any>;
 
 export type TTagCreation = Pick<ITag, 'label'>;
+export type TArticleTagsCreation = {
+    tagId: number,
+    articleId: number,
+}
 
 export { TError, TErrorData };

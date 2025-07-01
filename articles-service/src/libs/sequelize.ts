@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize-typescript';
 import config from 'config';
 import logger from '@libs/logger';
 import {Article} from "@components/articles/models";
-import {Tag} from "@components/articles/models";
+import {Tag} from "@components/tags/models";
 import {ArticleTag} from "@components/articles/models";
 
 const sequelize = new Sequelize(

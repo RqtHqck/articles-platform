@@ -6,11 +6,11 @@ import {
     PrimaryKey,
     AutoIncrement,
     AllowNull,
-    BelongsToMany
+    BelongsToMany, Unique
 } from 'sequelize-typescript';
 import { TagEnum } from '@entities/enums';
-import Article from './Article';
-import ArticleTag from './ArticleTag';
+import {Article} from '@components/articles/models';
+import {ArticleTag} from '@components/articles/models';
 
 @Table({
     tableName: 'tags',
@@ -25,6 +25,7 @@ class Tag extends Model {
     declare id: number;
 
     @AllowNull(false)
+    @Unique
     @Column({
         type: DataType.ENUM(...Object.values(TagEnum)),
         allowNull: false

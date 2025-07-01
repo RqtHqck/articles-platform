@@ -7,9 +7,9 @@ import {
     AutoIncrement,
     AllowNull,
     CreatedAt,
-    UpdatedAt, BelongsToMany
+    UpdatedAt, BelongsToMany, Unique
 } from 'sequelize-typescript';
-import Tag from "./Tag";
+import Tag from "@components/tags/models/Tag";
 import ArticleTag from "./ArticleTag";
 
 @Table({
@@ -25,6 +25,7 @@ class Article extends Model {
     declare id: number;
 
     @AllowNull(false)
+    @Unique
     @Column({
         type: DataType.STRING(255),
         unique: true

@@ -2,16 +2,22 @@ import {Request} from "express";
 import BaseController from '@classes/BaseController';
 import {CreateArticleService} from '../services';
 import {ICreateArticleDto} from "@entities/interfaces";
+import {TagEnum} from "@entities/enums";
 
 class CreateArticleController extends BaseController {
     get bodySchema() {
         return {
             type: 'object',
-            required: ['title', 'content'],
+            required: ['title', 'content', 'tags'],
             additionalProperties: false,
             properties: {
                 title: { type: 'string' },
                 content: { type: 'string' },
+                tags: {
+                    type: "array",
+                    items: { "type": "number" },
+                    minItems: 1
+                },
             }
         };
     }

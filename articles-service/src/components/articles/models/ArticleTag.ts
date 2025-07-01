@@ -8,7 +8,7 @@ import {
 } from 'sequelize-typescript';
 import {NonAttribute} from "sequelize";
 import Article from './Article';
-import Tag from './Tag';
+import Tag from '@components/tags/models/Tag';
 
 @Table({
     tableName: 'article_tags',
