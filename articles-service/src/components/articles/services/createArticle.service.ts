@@ -6,10 +6,12 @@ import {TArticleTagsCreation, TTagCreation} from "@entities/types";
 import {Tag} from "@components/tags/models";
 import { Op } from 'sequelize';
 import BadRequestError from "@errors/BadRequestError";
+import logger from "@libs/logger";
 
 const CreateArticleService = async (
     updateData: ICreateArticleDto,
 ): Promise<void> => {
+    logger.info("CreateArticleService");
     const { title, content, tags } = updateData;
 
     const tagsFound = await Tag.findAll({

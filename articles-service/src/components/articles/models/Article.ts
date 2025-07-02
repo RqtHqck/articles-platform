@@ -12,6 +12,7 @@ import {
 import Tag from "@components/tags/models/Tag";
 import ArticleTag from "./ArticleTag";
 
+
 @Table({
     tableName: 'articles',
     schema: 'public',
@@ -36,18 +37,11 @@ class Article extends Model {
     @Column(DataType.TEXT)
     declare content: string;
 
-    @AllowNull(true)
+    @CreatedAt
     @Column({
-        type: DataType.DATE,
         field: 'published_at'
     })
     declare publishedAt: Date;
-
-    @CreatedAt
-    @Column({
-        field: 'created_at'
-    })
-    declare createdAt: Date;
 
     @UpdatedAt
     @Column({

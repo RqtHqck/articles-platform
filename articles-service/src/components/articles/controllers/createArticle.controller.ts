@@ -3,6 +3,7 @@ import BaseController from '@classes/BaseController';
 import {CreateArticleService} from '../services';
 import {ICreateArticleDto} from "@entities/interfaces";
 import {TagEnum} from "@entities/enums";
+import logger from "@libs/logger";
 
 class CreateArticleController extends BaseController {
     get bodySchema() {
@@ -23,6 +24,7 @@ class CreateArticleController extends BaseController {
     }
 
     async controller(req: Request): Promise<string> {
+        logger.info("CreateArticleController")
         const updateData = req.body as ICreateArticleDto;
 
         await CreateArticleService(updateData);

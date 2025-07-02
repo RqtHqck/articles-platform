@@ -8,8 +8,11 @@ export interface ICreateArticleDto {
 
 
 export interface IArticle {
+    id?: number;
     title: string;
     content: string;
+    publishedAt: Date;
+    updatedAt: Date;
 }
 
 export interface ITag {
