@@ -2,7 +2,7 @@ import express from 'express';
 
 import {
     CreateArticleController, DeleteArticleController,
-    GetArticleByIdService, GetAllArticlesController
+    GetArticleByIdService, GetAllArticlesController, UpdateArticleController
 } from './controllers';
 
 const router = express.Router();
@@ -27,6 +27,9 @@ router.get(
     GetArticleByIdService.run
 );
 
-
+router.put(
+    '/:id',
+    UpdateArticleController.run
+);
 
 export default router;

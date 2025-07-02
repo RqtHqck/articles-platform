@@ -7,6 +7,14 @@ export interface ICreateArticleDto {
 }
 
 
+export interface IUpdateArticleDto {
+    title: string;
+    content: string;
+    tags: number[];
+}
+
+
+
 export interface IArticle {
     id?: number;
     title: string;

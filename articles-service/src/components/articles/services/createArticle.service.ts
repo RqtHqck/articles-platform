@@ -38,15 +38,18 @@ const CreateArticleService = async (
         raw: true,
     });
 
-    const articleTags = tags.map(tag => ({articleId: article.id, tagId: tag}))
-    await ArticleTag.bulkCreate(articleTags as TArticleTagsCreation[], { ignoreDuplicates: true })
-
     if (!created) {
         throw new ConflictError({
             code: 'conflict_error',
             text: 'Статья с таким title уже существует',
         });
     }
+
+    const articleTags = tags.map(tag => ({articleId: article.id, tagId: tag}))
+    
+    await ArticleTag.bulkCreate(articleTags as TArticleTagsCreation[], { ignoreDuplicates: true })
+
+
 };
 
 export default CreateArticleService;
