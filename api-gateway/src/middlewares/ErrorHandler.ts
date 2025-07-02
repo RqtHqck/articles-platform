@@ -18,6 +18,7 @@ export const ErrorsHandlerMiddleware: ErrorRequestHandler = (
             text: error.text,
             data: error.data as TErrorData,
         });
+        return;
     }
 
     res.status(500).send({

@@ -29,7 +29,7 @@ console.log(process.env.ARTICLES_SERVICE_URL)
 app.use('/api/articles',
     proxy(process.env.ARTICLES_SERVICE_URL!, {
         proxyReqPathResolver: (req) => {
-            console.log("API-GATEWA -> " + req.url);
+            console.log("API-GATEWAY -> ARTICLES-SERVICE");
             return req.url;
         },
         proxyErrorHandler: (err, res, next) => {
