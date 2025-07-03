@@ -1,7 +1,9 @@
 {
   "preset": "ts-jest",
   "testEnvironment": "node",
-  "roots": ["<rootDir>/src/components/articles/tests", "<rootDir>/src/components/tags/tests"],
+  "roots": [
+    "<rootDir>/src/tests/unit"
+  ],
   "moduleFileExtensions": ["ts", "js"],
   "moduleNameMapper": {
     "^@helpers/(.*)$": "<rootDir>/src/helpers/$1",

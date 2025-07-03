@@ -1,11 +1,11 @@
-import {GetAllArticlesService} from "../../services";
-import { Article } from "../../models";
-import { Tag } from "../../../tags/models";
+import {GetAllArticlesService} from "../../../../../services";
+import { Article } from "../../../../../models";
+import { Tag } from "../../../../../../tags/models";
 
-jest.mock("../../models", () => ({
+jest.mock("../../../../../models", () => ({
     Article: { findAll: jest.fn() },
 }));
-jest.mock("../../../tags/models", () => ({
+jest.mock("../../../../../../tags/models", () => ({
     Tag: jest.fn(), // модель нам нужна просто для include, она не используется напрямую
 }));
 

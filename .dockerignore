@@ -1,2 +1,1 @@
-articles-service/src/components/articles/tests/**
-articles-service/src/components/tags/tests/**
+articles-service/src/tests/**

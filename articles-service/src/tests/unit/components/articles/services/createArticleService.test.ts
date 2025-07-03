@@ -1,16 +1,16 @@
-import {CreateArticleService} from "../../services";
-import { ConflictError, BadRequestError } from '../../../../errors/index';
-import { Article, ArticleTag } from "../../models";
-import { Tag } from "../../../tags/models";
+import {CreateArticleService} from "../../../../../services";
+import { ConflictError, BadRequestError } from '@errors/index';
+import { Article, ArticleTag } from "../../../../../models";
+import { Tag } from "../../../../../../tags/models";
 import { Model } from "sequelize";
 import { Op } from 'sequelize';
 
 // Мокируем методы моделей, чтобы не дергать реальную базу
-jest.mock('../../models', () => ({
+jest.mock('../../../../../models', () => ({
     Article: { findOrCreate: jest.fn() },
     ArticleTag: { bulkCreate: jest.fn() },
 }));
-jest.mock('../../../tags/models', () => ({
+jest.mock('../../../../../../tags/models', () => ({
     Tag: { findAll: jest.fn() },
 }));
 

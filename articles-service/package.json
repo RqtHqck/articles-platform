@@ -7,10 +7,10 @@
     "start": "cross-env NODE_ENV=dev node dist/app.js",
     "compile": "cross-env NODE_ENV=dev tsc --project tsconfig.json",
     "start-compile": "cross-env NODE_ENV=dev npm run compile && cross-env NODE_ENV=dev npm run start",
-    "test:unit": "jest --config jest.unit.config.js",
-    "test:integration": "jest --config jest.integration.config.js",
+    "test:unit": "cross-env NODE_ENV=test jest --config jest.unit.config.json",
+    "test:integration": "cross-env NODE_ENV=test jest --config jest.integration.config.json",
     "test": "npm run test:unit && npm run test:integration",
-    "test-coverage": "jest --config jest.unit.config.json --coverage"
+    "test-coverage": "cross-env NODE_ENV=test jest --config jest.unit.config.json --coverage"
   },
   "keywords": [],
   "author": "",

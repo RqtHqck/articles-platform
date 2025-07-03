@@ -1,8 +1,8 @@
-import {CreateManyTagsService} from "../../services";
-import { Tag } from "../../models";
-import { TagEnum } from "../../../../entities/enums";
+import {CreateManyTagsService} from "@components/tags/services";
+import { Tag } from "@components/tags/models";
+import { TagEnum } from "@entities/enums";
 
-jest.mock("../../models", () => ({
+jest.mock("@components/tags/models", () => ({
     Tag: {
         bulkCreate: jest.fn(),
     },
