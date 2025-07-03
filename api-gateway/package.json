@@ -4,9 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node dist/server.js",
-    "compile": "tsc --project tsconfig.json",
-    "start-compile": "npm run compile && npm run start"
+    "start": "cross-env NODE_ENV=dev node dist/app.js",
+    "compile": "cross-env NODE_ENV=dev tsc --project tsconfig.json",
+    "start-compile": "cross-env NODE_ENV=dev npm run compile && cross-env NODE_ENV=dev npm run start"
   },
   "keywords": [],
   "author": "",

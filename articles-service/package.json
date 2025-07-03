@@ -4,9 +4,13 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node dist/app.js",
-    "compile": "tsc --project tsconfig.json",
-    "start-compile": "npm run compile && npm run start"
+    "start": "cross-env NODE_ENV=dev node dist/app.js",
+    "compile": "cross-env NODE_ENV=dev tsc --project tsconfig.json",
+    "start-compile": "cross-env NODE_ENV=dev npm run compile && cross-env NODE_ENV=dev npm run start",
+    "test:unit": "jest --config jest.unit.config.js",
+    "test:integration": "jest --config jest.integration.config.js",
+    "test": "npm run test:unit && npm run test:integration",
+    "test-coverage": "jest --config jest.unit.config.json --coverage"
   },
   "keywords": [],
   "author": "",
@@ -45,6 +49,7 @@
     "@types/express": "^5.0.0",
     "@types/express-http-proxy": "^1.6.6",
     "@types/express-rate-limit": "^6.0.2",
+    "@types/jest": "^30.0.0",
     "@types/morgan": "^1.9.9",
     "@types/node": "^24.0.3",
     "@types/pg": "^8.11.10",
@@ -52,10 +57,12 @@
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
     "cross-env": "^7.0.3",
+    "jest": "^30.0.4",
     "link-module-alias": "^1.2.0",
     "module-alias": "^2.2.3",
     "nodemon": "^3.1.9",
-    "typescript": "^5.4.0"
+    "ts-jest": "^29.4.0",
+    "typescript": "^5.8.3"
   },
   "_moduleAliases": {
     "@root": "./dist/",
