@@ -20,8 +20,8 @@ services:
     build:
       context: ./articles-service
       dockerfile: Dockerfile
-    ports:
-      - '3001:3001'
+    expose:
+      - '3001'
     env_file:
       - ./articles-service/config/.env
     depends_on:
