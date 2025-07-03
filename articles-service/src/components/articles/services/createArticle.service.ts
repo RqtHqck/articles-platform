@@ -1,11 +1,10 @@
-import { ConflictError } from '@errors/index';
+import { ConflictError, BadRequestError } from '@errors/index';
 import {Article, ArticleTag} from '@components/articles/models';
 
 import {ICreateArticleDto, ITag} from "@entities/interfaces";
 import {TArticleTagsCreation, TTagCreation} from "@entities/types";
 import {Tag} from "@components/tags/models";
 import { Op } from 'sequelize';
-import BadRequestError from "@errors/BadRequestError";
 import logger from "@libs/logger";
 
 const CreateArticleService = async (
