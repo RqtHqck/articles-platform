@@ -30,14 +30,14 @@ const sequelize = new Sequelize(
 sequelize
     .authenticate()
     .then(() => {
-        logger.info(`Successful connect to database postgresql "${config.get('DATABASE.NAME')}"`);
+        logger.info(`Successful connect to database postgresql "${config.get<string>('DATABASE.NAME')}"`);
         return sequelize.sync({ force: false });
     })
     .then(() => {
         logger.info(`Successful synchronized with database postgresql`);
     })
     .catch((err: Error) => {
-        logger.error(`Failed to connect to database "${config.get('DATABASE.NAME')}": ${err.message}`);
+        logger.error(`Failed to connect to database "${config.get<string>('DATABASE.NAME')}": ${err.message}`);
     });
 
 export default sequelize;

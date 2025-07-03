@@ -11,6 +11,8 @@ COPY . .
 
 RUN npm run compile
 
+ENV NODE_ENV=dev
+
 EXPOSE 3000
 
 CMD ["npm", "run", "start"]

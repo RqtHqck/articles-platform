@@ -8,7 +8,7 @@ services:
     ports:
       - '3000:3000'
     env_file:
-      - ./api-gateway/config/.env
+      - ./api-gateway/config/.env.dev
     depends_on:
       article-service:
         condition: service_started
@@ -23,7 +23,7 @@ services:
     expose:
       - '3001'
     env_file:
-      - ./articles-service/config/.env
+      - ./articles-service/config/.env.dev
     depends_on:
       kafka:
         condition: service_healthy
@@ -40,7 +40,7 @@ services:
     volumes:
       - article_db_data:/var/lib/postgresql/data
     env_file:
-      - ./articles-service/config/.env
+      - ./articles-service/config/.env.dev
     restart: unless-stopped
 
 
