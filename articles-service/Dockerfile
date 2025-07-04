@@ -13,6 +13,6 @@ RUN npm run compile
 
 ENV NODE_ENV=dev
 
-EXPOSE 3000
+EXPOSE 3001
 
 CMD ["npm", "run", "start"]

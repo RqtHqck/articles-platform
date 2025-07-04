@@ -8,10 +8,10 @@ import { Op } from 'sequelize';
 import logger from "@libs/logger";
 
 const CreateArticleService = async (
-    updateData: ICreateArticleDto,
+    createData: ICreateArticleDto,
 ): Promise<void> => {
     logger.info("CreateArticleService");
-    const { title, content, tags } = updateData;
+    const { title, content, tags } = createData;
 
     const tagsFound = await TagModel.findAll({
         where: {

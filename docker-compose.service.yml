@@ -1,0 +1,64 @@
+services:
+
+  kafka:
+    image: bitnami/kafka:latest
+    container_name: kafka-service_articles-platform
+    ports:
+      - "9092:9092"  # Приложения в Compose (kafka‑ui, микросервисы).
+      - "9094:9094"  # Локальные инструменты на хосте.
+    environment:
+      - KAFKA_ENABLE_KRAFT=yes
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://kafka:9094
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@127.0.0.1:9093
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - BITNAMI_DEBUG=yes
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_NODE_ID=1
+      - KAFKA_CFG_NUM_PARTITIONS=2
+      - KAFKA_KRAFT_CLUSTER_ID=0
+      - KAFKA_CFG_LOG_DIRS=/bitnami/kafka/data
+    volumes:
+      - kafka_data:/bitnami/kafka
+    healthcheck:
+      test: ["CMD", "bash", "-c", "echo > /dev/tcp/localhost/9092"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+
+  kafka-ui:
+    container_name: kafka-ui-service_articles-platform
+    image: provectuslabs/kafka-ui:latest
+    depends_on:
+      - kafka
+    ports:
+      - 8080:8080
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+      - DYNAMIC_CONFIG_ENABLED=true
+      - LOGGING_LEVEL_ROOT=DEBUG
+
+
+
+  pgadmin:
+    container_name: pgadmin-service_articles-platform
+    image: dpage/pgadmin4
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    env_file:
+      - ./.env
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    restart: unless-stopped
+
+
+volumes:
+  kafka_data:
+  pgadmin:
+
