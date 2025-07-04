@@ -1,5 +1,5 @@
 import {CreateManyTagsService} from "@components/tags/services";
-import { Tag } from "@components/tags/models";
+import { TagModel } from "@components/tags/models";
 import { TagEnum } from "@entities/enums";
 
 jest.mock("@components/tags/models", () => ({
@@ -8,7 +8,7 @@ jest.mock("@components/tags/models", () => ({
     },
 }));
 
-const mockedTag = Tag as jest.Mocked<typeof Tag>;
+const mockedTag = TagModel as jest.Mocked<typeof TagModel>;
 
 describe("CreateManyTagsService", () => {
     afterEach(() => {

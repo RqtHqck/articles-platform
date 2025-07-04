@@ -1,7 +1,7 @@
 import {CreateArticleService} from "@components/articles/services";
 import { ConflictError, BadRequestError } from '@errors/index';
-import { Article, ArticleTag } from "@components/articles/models";
-import { Tag } from "@components/tags/models";
+import { ArticleModel, ArticleTagModel } from "@components/articles/models";
+import { TagModel } from "@components/tags/models";
 import { Model } from "sequelize";
 import { Op } from 'sequelize';
 
@@ -15,9 +15,9 @@ jest.mock('@components/tags/models', () => ({
 }));
 
 // Получаем типобезопасные ссылки на моки, чтобы TS не ругался
-const mockedArticle = Article as jest.Mocked<typeof Article>;
-const mockedTag = Tag as jest.Mocked<typeof Tag>;
-const mockedArticleTag = ArticleTag as jest.Mocked<typeof ArticleTag>;
+const mockedArticle = ArticleModel as jest.Mocked<typeof ArticleModel>;
+const mockedTag = TagModel as jest.Mocked<typeof TagModel>;
+const mockedArticleTag = ArticleTagModel as jest.Mocked<typeof ArticleTagModel>;
 
 describe("CreateArticleService", () => {
     // Входные данные

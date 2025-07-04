@@ -1,4 +1,4 @@
-import ArticleTag from "./ArticleTag";
-import Article from "./Article";
+import ArticleTagModel from "./ArticleTag.model";
+import ArticleModel from "./Article.model";
 
-export { Article, ArticleTag };
+export { ArticleModel, ArticleTagModel };

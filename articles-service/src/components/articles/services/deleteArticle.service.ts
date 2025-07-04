@@ -1,11 +1,11 @@
-import { Article, ArticleTag } from '@components/articles/models';
+import { ArticleModel, ArticleTagModel } from '@components/articles/models';
 import { Op } from 'sequelize';
 import NotFoundError from "@errors/NotFoundError";
 import logger from "@libs/logger";
 
 const DeleteArticleService = async (id: number): Promise<void> => {
     logger.info("DeleteArticleService");
-    const article = await Article.findByPk(id);
+    const article = await ArticleModel.findByPk(id);
 
     if (!article) {
         throw new NotFoundError({
@@ -15,10 +15,10 @@ const DeleteArticleService = async (id: number): Promise<void> => {
     }
 
     // Удалить связи с тегами
-    await ArticleTag.destroy({ where: { articleId: id } });
+    await ArticleTagModel.destroy({ where: { articleId: id } });
 
     // Удалить статью
-    await Article.destroy({ where: { id } });
+    await ArticleModel.destroy({ where: { id } });
 };
 
 export default DeleteArticleService;

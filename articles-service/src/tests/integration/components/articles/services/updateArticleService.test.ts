@@ -1,5 +1,5 @@
-import { Article, ArticleTag } from '@components/articles/models';
-import { Tag } from '@components/tags/models';
+import { ArticleModel, ArticleTagModel } from '@components/articles/models';
+import { TagModel } from '@components/tags/models';
 import {UpdateArticleService} from '@components/articles/services';
 import { NotFoundError, ConflictError, BadRequestError } from '@errors/index';
 import { initTestDB, cleanTestDB, closeTestDB } from '@tests/integration/sequelizeTestHelper';
@@ -20,17 +20,17 @@ afterAll(async () => {
 describe('UpdateArticleService – integration', () => {
     it('updates article, title/content & tag links', async () => {
         // ── Подготовка ────────────────────────────────────────
-        const tagA = await Tag.create({ label: 'tech' });
-        const tagB = await Tag.create({ label: 'news' });
-        const tagC = await Tag.create({ label: 'lifestyle' });
+        const tagA = await TagModel.create({ label: 'tech' });
+        const tagB = await TagModel.create({ label: 'news' });
+        const tagC = await TagModel.create({ label: 'lifestyle' });
 
-        const article = await Article.create({
+        const article = await ArticleModel.create({
             title: 'Old title',
             content: 'Old content',
         });
 
         // cвязь старого тега
-        await ArticleTag.create({ articleId: article.id, tagId: tagA.id });
+        await ArticleTagModel.create({ articleId: article.id, tagId: tagA.id });
 
         // ── Вызываем сервис ───────────────────────────────────
         const dto = {
@@ -42,7 +42,7 @@ describe('UpdateArticleService – integration', () => {
         await UpdateArticleService(article.id, dto);
 
         // ── Проверяем результат ───────────────────────────────
-        const updated = await Article.findByPk(article.id, { include: [Tag] });
+        const updated = await ArticleModel.findByPk(article.id, { include: [TagModel] });
         expect(updated!.title).toBe('New title');
         expect(updated!.content).toBe('New content');
 
@@ -51,7 +51,7 @@ describe('UpdateArticleService – integration', () => {
     });
 
     it('throws NotFoundError if article id is unknown', async () => {
-        const tag = await Tag.create({ label: 'tech' });
+        const tag = await TagModel.create({ label: 'tech' });
 
         await expect(
             UpdateArticleService(9999, {
@@ -63,12 +63,12 @@ describe('UpdateArticleService – integration', () => {
     });
 
     it('throws ConflictError when title duplicates another article', async () => {
-        const tag = await Tag.create({ label: 'lifestyle' });
+        const tag = await TagModel.create({ label: 'lifestyle' });
 
         // статья‑дубликат
-        await Article.create({ title: 'Unique', content: 'x' });
+        await ArticleModel.create({ title: 'Unique', content: 'x' });
 
-        const main = await Article.create({ title: 'Main', content: 'y' });
+        const main = await ArticleModel.create({ title: 'Main', content: 'y' });
 
         await expect(
             UpdateArticleService(main.id, {
@@ -80,8 +80,8 @@ describe('UpdateArticleService – integration', () => {
     });
 
     it('throws BadRequestError if some tag ids are invalid', async () => {
-        const validTag = await Tag.create({ label: 'tech' });
-        const art = await Article.create({ title: 'T', content: 'C' });
+        const validTag = await TagModel.create({ label: 'tech' });
+        const art = await ArticleModel.create({ title: 'T', content: 'C' });
 
         await expect(
             UpdateArticleService(art.id, {

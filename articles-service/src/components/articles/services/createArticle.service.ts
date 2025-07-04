@@ -1,9 +1,9 @@
 import { ConflictError, BadRequestError } from '@errors/index';
-import {Article, ArticleTag} from '@components/articles/models';
+import {ArticleModel, ArticleTagModel} from '@components/articles/models';
 
 import {ICreateArticleDto, ITag} from "@entities/interfaces";
 import {TArticleTagsCreation, TTagCreation} from "@entities/types";
-import {Tag} from "@components/tags/models";
+import {TagModel} from "@components/tags/models";
 import { Op } from 'sequelize';
 import logger from "@libs/logger";
 
@@ -13,7 +13,7 @@ const CreateArticleService = async (
     logger.info("CreateArticleService");
     const { title, content, tags } = updateData;
 
-    const tagsFound = await Tag.findAll({
+    const tagsFound = await TagModel.findAll({
         where: {
             id: {
                 [Op.in]: tags,
@@ -28,7 +28,7 @@ const CreateArticleService = async (
         })
     }
 
-    const [article, created] = await Article.findOrCreate({
+    const [article, created] = await ArticleModel.findOrCreate({
         where: { title },
         defaults: {
             title,
@@ -46,7 +46,7 @@ const CreateArticleService = async (
 
     const articleTags = tags.map(tag => ({articleId: article.id, tagId: tag}))
     
-    await ArticleTag.bulkCreate(articleTags as TArticleTagsCreation[], { ignoreDuplicates: true })
+    await ArticleTagModel.bulkCreate(articleTags as TArticleTagsCreation[], { ignoreDuplicates: true })
 
 
 };

@@ -9,8 +9,8 @@ import {
     CreatedAt,
     UpdatedAt, BelongsToMany, Unique
 } from 'sequelize-typescript';
-import Tag from "@components/tags/models/Tag";
-import ArticleTag from "./ArticleTag";
+import TagModel from "@components/tags/models/Tag.model";
+import ArticleTagModel from "./ArticleTag.model";
 
 
 @Table({
@@ -19,7 +19,7 @@ import ArticleTag from "./ArticleTag";
     timestamps: true, // чтобы автоматически велись created_at / updated_at
     underscored: true // поля будут snake_case: created_at, updated_at
 })
-class Article extends Model {
+class ArticleModel extends Model {
     @PrimaryKey
     @AutoIncrement
     @Column(DataType.INTEGER)
@@ -49,8 +49,8 @@ class Article extends Model {
     })
     declare updatedAt: Date;
 
-    @BelongsToMany(() => Tag, () => ArticleTag)
-    declare tags: Tag[];
+    @BelongsToMany(() => TagModel, () => ArticleTagModel)
+    declare tags: TagModel[];
 }
 
-export default Article;
+export default ArticleModel;

@@ -1,6 +1,6 @@
 import {UpdateArticleService} from "@components/articles/services";
-import { Article, ArticleTag } from "@components/articles/models";
-import { Tag } from "@components/tags/models";
+import { ArticleModel, ArticleTagModel } from "@components/articles/models";
+import { TagModel } from "@components/tags/models";
 import { Op } from "sequelize";
 import { NotFoundError, ConflictError, BadRequestError } from "@errors/index";
 
@@ -20,9 +20,9 @@ jest.mock("@components/tags/models", () => ({
     },
 }));
 
-const mockedArticle = Article as jest.Mocked<typeof Article>;
-const mockedArticleTag = ArticleTag as jest.Mocked<typeof ArticleTag>;
-const mockedTag = Tag as jest.Mocked<typeof Tag>;
+const mockedArticle = ArticleModel as jest.Mocked<typeof ArticleModel>;
+const mockedArticleTag = ArticleTagModel as jest.Mocked<typeof ArticleTagModel>;
+const mockedTag = TagModel as jest.Mocked<typeof TagModel>;
 
 describe("UpdateArticleService", () => {
     const id = 1;

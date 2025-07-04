@@ -1,9 +1,9 @@
 import { Sequelize } from 'sequelize-typescript';
 import config from 'config';
 import logger from '@libs/logger';
-import {Article} from "@components/articles/models";
-import {Tag} from "@components/tags/models";
-import {ArticleTag} from "@components/articles/models";
+import {ArticleModel} from "@components/articles/models";
+import {TagModel} from "@components/tags/models";
+import {ArticleTagModel} from "@components/articles/models";
 
 const sequelize = new Sequelize(
     config.get<string>('DATABASE.NAME'),
@@ -22,7 +22,7 @@ const sequelize = new Sequelize(
         retry: {
             max: 3,
         },
-        models: [Article, Tag, ArticleTag],
+        models: [ArticleModel, TagModel, ArticleTagModel],
         logging: (msg: string) => logger.info(msg),
     }
 );

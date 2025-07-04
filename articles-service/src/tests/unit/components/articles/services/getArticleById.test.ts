@@ -1,5 +1,5 @@
 import {GetArticleByIdService} from "@components/articles/services";
-import { Article } from "@components/articles/models";
+import { ArticleModel } from "@components/articles/models";
 import { NotFoundError } from '@errors/index';
 
 jest.mock("@components/articles/models", () => ({
@@ -8,7 +8,7 @@ jest.mock("@components/articles/models", () => ({
     },
 }));
 
-const mockedArticle = Article as jest.Mocked<typeof Article>;
+const mockedArticle = ArticleModel as jest.Mocked<typeof ArticleModel>;
 
 describe("GetArticleByIdService", () => {
     afterEach(() => {

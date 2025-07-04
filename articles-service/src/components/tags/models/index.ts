@@ -1,3 +1,3 @@
-import Tag from "./Tag";
+import TagModel from "./Tag.model";
 
-export { Tag };
+export { TagModel };

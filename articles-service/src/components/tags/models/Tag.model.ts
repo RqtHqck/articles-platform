@@ -9,8 +9,8 @@ import {
     BelongsToMany, Unique
 } from 'sequelize-typescript';
 import { TagEnum } from '@entities/enums';
-import {Article} from '@components/articles/models';
-import {ArticleTag} from '@components/articles/models';
+import {ArticleModel} from '@components/articles/models';
+import {ArticleTagModel} from '@components/articles/models';
 
 @Table({
     tableName: 'tags',
@@ -18,7 +18,7 @@ import {ArticleTag} from '@components/articles/models';
     timestamps: false,
     underscored: true
 })
-class Tag extends Model {
+class TagModel extends Model {
     @PrimaryKey
     @AutoIncrement
     @Column(DataType.INTEGER)
@@ -32,8 +32,8 @@ class Tag extends Model {
     })
     declare label: TagEnum;
 
-    @BelongsToMany(() => Article, () => ArticleTag)
-    declare articles: Article[];
+    @BelongsToMany(() => ArticleModel, () => ArticleTagModel)
+    declare articles: ArticleModel[];
 }
 
-export default Tag;
+export default TagModel;

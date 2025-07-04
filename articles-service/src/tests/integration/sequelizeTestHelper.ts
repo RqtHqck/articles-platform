@@ -1,6 +1,6 @@
 import sequelize from './sequelize';
-import { Article, ArticleTag } from '@components/articles/models';
-import { Tag } from '@components/tags/models';
+import { ArticleModel, ArticleTagModel } from '@components/articles/models';
+import { TagModel } from '@components/tags/models';
 
 export async function initTestDB() {
     await sequelize.authenticate();
@@ -9,9 +9,9 @@ export async function initTestDB() {
 }
 
 export async function cleanTestDB() {
-    await ArticleTag.destroy({ where: {} }); // Сначала удаляем связи
-    await Article.destroy({ where: {} });    // Затем статьи
-    await Tag.destroy({ where: {} });        // И только потом теги
+    await ArticleTagModel.destroy({ where: {} }); // Сначала удаляем связи
+    await ArticleModel.destroy({ where: {} });    // Затем статьи
+    await TagModel.destroy({ where: {} });        // И только потом теги
 }
 
 export async function closeTestDB() {

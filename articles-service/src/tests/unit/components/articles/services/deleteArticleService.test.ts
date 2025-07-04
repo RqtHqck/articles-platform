@@ -1,5 +1,5 @@
 import {DeleteArticleService} from "@components/articles/services";
-import { Article, ArticleTag } from "@components/articles/models";
+import { ArticleModel, ArticleTagModel } from "@components/articles/models";
 import { NotFoundError } from '@errors/index';
 
 jest.mock("@components/articles/models", () => ({
@@ -12,8 +12,8 @@ jest.mock("@components/articles/models", () => ({
     },
 }));
 
-const mockedArticle = Article as jest.Mocked<typeof Article>;
-const mockedArticleTag = ArticleTag as jest.Mocked<typeof ArticleTag>;
+const mockedArticle = ArticleModel as jest.Mocked<typeof ArticleModel>;
+const mockedArticleTag = ArticleTagModel as jest.Mocked<typeof ArticleTagModel>;
 
 describe("DeleteArticleService", () => {
     afterEach(() => {

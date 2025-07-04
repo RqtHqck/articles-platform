@@ -1,5 +1,5 @@
-import { Article, ArticleTag } from "@components/articles/models";
-import { Tag } from "@components/tags/models";
+import { ArticleModel, ArticleTagModel } from "@components/articles/models";
+import { TagModel } from "@components/tags/models";
 import { Op } from "sequelize";
 import NotFoundError from "@errors/NotFoundError";
 import ConflictError from "@errors/ConflictError";
@@ -12,7 +12,7 @@ const UpdateArticleService = async (
 ): Promise<void> => {
     const { title, content, tags } = updateData;
 
-    const article = await Article.findByPk(id);
+    const article = await ArticleModel.findByPk(id);
 
     if (!article) {
         throw new NotFoundError({
@@ -22,7 +22,7 @@ const UpdateArticleService = async (
     }
 
     // Проверка на дубликат title у другой статьи
-    const duplicate = await Article.findOne({
+    const duplicate = await ArticleModel.findOne({
         where: {
             title,
             id: { [Op.ne]: id },
@@ -37,7 +37,7 @@ const UpdateArticleService = async (
     }
 
     // Проверка тегов
-    const tagsFound = await Tag.findAll({
+    const tagsFound = await TagModel.findAll({
         where: {
             id: {
                 [Op.in]: tags,
@@ -56,14 +56,14 @@ const UpdateArticleService = async (
     await article.update({ title, content });
 
     // Обновление тегов: удалить старые и добавить новые
-    await ArticleTag.destroy({ where: { articleId: id } });
+    await ArticleTagModel.destroy({ where: { articleId: id } });
 
     const newTags = tags.map(tagId => ({
         articleId: id,
         tagId,
     }));
 
-    await ArticleTag.bulkCreate(newTags);
+    await ArticleTagModel.bulkCreate(newTags);
 };
 
 export default UpdateArticleService;

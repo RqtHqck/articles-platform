@@ -1,6 +1,6 @@
 import {GetAllArticlesService} from "@components/articles/services";
-import { Article } from "@components/articles/models";
-import { Tag } from "@components/tags/models";
+import { ArticleModel } from "@components/articles/models";
+import { TagModel } from "@components/tags/models";
 
 jest.mock("@components/articles/models", () => ({
     Article: { findAll: jest.fn() },
@@ -9,7 +9,7 @@ jest.mock("@components/tags/models", () => ({
     Tag: jest.fn(), // модель нам нужна просто для include, она не используется напрямую
 }));
 
-const mockedArticle = Article as jest.Mocked<typeof Article>;
+const mockedArticle = ArticleModel as jest.Mocked<typeof ArticleModel>;
 
 describe("GetAllArticlesService", () => {
     afterEach(() => {
@@ -45,7 +45,7 @@ describe("GetAllArticlesService", () => {
         expect(mockedArticle.findAll).toHaveBeenCalledWith({
             limit,
             offset,
-            include: [{ model: Tag }],
+            include: [{ model: TagModel }],
         });
 
         // Проверяем, что возвращаемые данные соответствуют ожиданиям
@@ -69,7 +69,7 @@ describe("GetAllArticlesService", () => {
         expect(mockedArticle.findAll).toHaveBeenCalledWith({
             limit,
             offset,
-            include: [{ model: Tag }],
+            include: [{ model: TagModel }],
         });
 
         expect(result.page).toBe(1);
@@ -88,7 +88,7 @@ describe("GetAllArticlesService", () => {
         expect(mockedArticle.findAll).toHaveBeenCalledWith({
             limit,
             offset,
-            include: [{ model: Tag }],
+            include: [{ model: TagModel }],
         });
 
         expect(result.limit).toBe(0);
@@ -107,7 +107,7 @@ describe("GetAllArticlesService", () => {
         expect(mockedArticle.findAll).toHaveBeenCalledWith({
             limit,
             offset,
-            include: [{ model: Tag }],
+            include: [{ model: TagModel }],
         });
 
         expect(result.page).toBe(0);

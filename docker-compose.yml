@@ -44,18 +44,6 @@ services:
     restart: unless-stopped
 
 
-  pgadmin:
-    container_name: pgadmin-service_articles-platform
-    image: dpage/pgadmin4
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-    env_file:
-      - ./.env
-    ports:
-      - "${PGADMIN_PORT:-5050}:80"
-    restart: unless-stopped
-
-
   kafka:
     image: bitnami/kafka:latest
     container_name: kafka-service_articles-platform
@@ -81,6 +69,7 @@ services:
       timeout: 5s
       retries: 10
 
+
   kafka-ui:
     container_name: kafka-ui-service_articles-platform
     image: provectuslabs/kafka-ui:latest
@@ -92,6 +81,19 @@ services:
       DYNAMIC_CONFIG_ENABLED: true
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+
+
+  pgadmin:
+    container_name: pgadmin-service_articles-platform
+    image: dpage/pgadmin4
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    env_file:
+      - ./.env
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    restart: unless-stopped
+
 
 volumes:
   article_db_data:

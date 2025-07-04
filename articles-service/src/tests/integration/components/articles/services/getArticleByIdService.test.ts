@@ -1,4 +1,4 @@
-import { Article, ArticleTag } from "@components/articles/models";
+import { ArticleModel, ArticleTagModel } from "@components/articles/models";
 import { GetArticleByIdService } from "@components/articles/services";
 import { NotFoundError } from "@errors/index";
 import { initTestDB, cleanTestDB, closeTestDB } from '@tests/integration/sequelizeTestHelper';
@@ -17,7 +17,7 @@ afterAll(async () => {
 
 describe("GetArticleByIdService", () => {
     it("should return article by id", async () => {
-        const createdArticle = await Article.create({
+        const createdArticle = await ArticleModel.create({
             title: "Test Article",
             content: "Test content",
         });

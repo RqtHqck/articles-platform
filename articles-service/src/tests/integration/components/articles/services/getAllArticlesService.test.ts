@@ -1,5 +1,5 @@
-import { Article, ArticleTag } from "@components/articles/models";
-import { Tag } from "@components/tags/models";
+import { ArticleModel, ArticleTagModel } from "@components/articles/models";
+import { TagModel } from "@components/tags/models";
 import {GetAllArticlesService} from "@components/articles/services";
 import { initTestDB, cleanTestDB, closeTestDB } from '@tests/integration/sequelizeTestHelper';
 
@@ -18,13 +18,13 @@ afterAll(async () => {
 describe("GetAllArticlesService", () => {
     it("should return paginated articles with tags", async () => {
         // Создаем теги
-        const tag1 = await Tag.create({ label: "tech" });
-        const tag2 = await Tag.create({ label: "lifestyle" });
+        const tag1 = await TagModel.create({ label: "tech" });
+        const tag2 = await TagModel.create({ label: "lifestyle" });
 
         // Создаем статьи
-        const article1 = await Article.create({ title: "Article 1", content: "Content 1" });
-        const article2 = await Article.create({ title: "Article 2", content: "Content 2" });
-        const article3 = await Article.create({ title: "Article 3", content: "Content 3" });
+        const article1 = await ArticleModel.create({ title: "Article 1", content: "Content 1" });
+        const article2 = await ArticleModel.create({ title: "Article 2", content: "Content 2" });
+        const article3 = await ArticleModel.create({ title: "Article 3", content: "Content 3" });
 
         // Связываем теги и статьи
         await article1.$add('tags', [tag1]);
