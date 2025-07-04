@@ -19,6 +19,7 @@
       "@classes/*": ["classes/*"],
       "@components/*": ["components/*"],
       "@routes/*": ["routes/*"],
+      "@tests/*": ["tests/*"],
       "@services/*": ["services/*"],
       "@middlewares/*": ["middlewares/*"],
       "@models/*": ["models/*"],

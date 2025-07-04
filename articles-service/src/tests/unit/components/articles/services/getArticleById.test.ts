@@ -1,8 +1,8 @@
-import {GetArticleByIdService} from "../../../../../services";
-import { Article } from "../../../../../models";
+import {GetArticleByIdService} from "@components/articles/services";
+import { Article } from "@components/articles/models";
 import { NotFoundError } from '@errors/index';
 
-jest.mock("../../../../../models", () => ({
+jest.mock("@components/articles/models", () => ({
     Article: {
         findByPk: jest.fn(),
     },

@@ -1,11 +1,11 @@
-import {GetAllArticlesService} from "../../../../../services";
-import { Article } from "../../../../../models";
-import { Tag } from "../../../../../../tags/models";
+import {GetAllArticlesService} from "@components/articles/services";
+import { Article } from "@components/articles/models";
+import { Tag } from "@components/tags/models";
 
-jest.mock("../../../../../models", () => ({
+jest.mock("@components/articles/models", () => ({
     Article: { findAll: jest.fn() },
 }));
-jest.mock("../../../../../../tags/models", () => ({
+jest.mock("@components/tags/models", () => ({
     Tag: jest.fn(), // модель нам нужна просто для include, она не используется напрямую
 }));
 
@@ -27,13 +27,13 @@ describe("GetAllArticlesService", () => {
                 id: 1,
                 title: "Test article",
                 content: "Content",
-                Tags: [{ id: 1, label: "tag1" }],
+                Tags: [{ id: 1, label: "tech" }],
             },
             {
                 id: 2,
                 title: "Another article",
                 content: "More content",
-                Tags: [{ id: 2, label: "tag2" }],
+                Tags: [{ id: 2, label: "news" }],
             },
         ];
 

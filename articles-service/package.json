@@ -8,7 +8,7 @@
     "compile": "cross-env NODE_ENV=dev tsc --project tsconfig.json",
     "start-compile": "cross-env NODE_ENV=dev npm run compile && cross-env NODE_ENV=dev npm run start",
     "test:unit": "cross-env NODE_ENV=test jest --config jest.unit.config.json",
-    "test:integration": "cross-env NODE_ENV=test jest --config jest.integration.config.json",
+    "test:integration": "cross-env NODE_ENV=test jest --runInBand --config jest.integration.config.json",
     "test": "npm run test:unit && npm run test:integration",
     "test-coverage": "cross-env NODE_ENV=test jest --config jest.unit.config.json --coverage"
   },
@@ -72,6 +72,7 @@
     "@components": "./dist/components",
     "@errors": "./dist/errors/",
     "@routes": "./dist/routes/",
+    "@tests": "./dist/tests/",
     "@controllers": "./dist/controllers/",
     "@services": "./dist/services/",
     "@models": "./dist/models",

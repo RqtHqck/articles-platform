@@ -1,10 +1,10 @@
-import {UpdateArticleService} from "../../../../../services";
-import { Article, ArticleTag } from "../../../../../models";
-import { Tag } from "../../../../../../tags/models";
+import {UpdateArticleService} from "@components/articles/services";
+import { Article, ArticleTag } from "@components/articles/models";
+import { Tag } from "@components/tags/models";
 import { Op } from "sequelize";
 import { NotFoundError, ConflictError, BadRequestError } from "@errors/index";
 
-jest.mock("../../../../../models", () => ({
+jest.mock("@components/articles/models", () => ({
     Article: {
         findByPk: jest.fn(),
         findOne: jest.fn(),
@@ -14,7 +14,7 @@ jest.mock("../../../../../models", () => ({
         bulkCreate: jest.fn(),
     },
 }));
-jest.mock("../../../../../../tags/models", () => ({
+jest.mock("@components/tags/models", () => ({
     Tag: {
         findAll: jest.fn(),
     },

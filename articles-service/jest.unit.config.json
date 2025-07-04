@@ -13,6 +13,7 @@
     "^@classes/(.*)$": "<rootDir>/src/classes/$1",
     "^@libs/(.*)$": "<rootDir>/src/libs/$1",
     "^@routes/(.*)$": "<rootDir>/src/routes/$1",
+    "^@tests/(.*)$": "<rootDir>/src/tests/$1",
     "^@middlewares/(.*)$": "<rootDir>/src/middlewares/$1"
   },
   "transform": {

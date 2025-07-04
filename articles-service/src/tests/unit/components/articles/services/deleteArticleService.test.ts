@@ -1,8 +1,8 @@
-import {DeleteArticleService} from "../../../../../services";
-import { Article, ArticleTag } from "../../../../../models";
+import {DeleteArticleService} from "@components/articles/services";
+import { Article, ArticleTag } from "@components/articles/models";
 import { NotFoundError } from '@errors/index';
 
-jest.mock("../../../../../models", () => ({
+jest.mock("@components/articles/models", () => ({
     Article: {
         findByPk: jest.fn(),
         destroy: jest.fn(),
