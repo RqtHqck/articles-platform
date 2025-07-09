@@ -27,3 +27,10 @@ export interface ITag {
     id?: string;
     label: TagEnum;
 }
+
+export interface ILog {
+    id?: string;
+    source: string;
+    message: string;
+    createdAt: Date;
+}
