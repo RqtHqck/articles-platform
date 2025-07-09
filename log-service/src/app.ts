@@ -8,7 +8,7 @@ import compression from "compression";
 import helmet from "helmet";
 import cors from "cors";
 import logger from "@libs/logger";
-import consumeServicesLogs from "@libs/kafka/producers/handleServicesLogs";
+import consumeServicesLogs from "@libs/kafka/consumers/handleServicesLogs";
 import {ErrorsHandlerMiddleware} from "@middlewares/ErrorHandler";
 import { router } from "@routes/index"
 

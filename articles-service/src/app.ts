@@ -9,11 +9,11 @@ import compression from "compression";
 import helmet from "helmet";
 import cors from "cors";
 import {ErrorsHandlerMiddleware} from "@middlewares/ErrorHandler";
+import CreateManyTagsService from "@components/tags/services/createManyTags.service";
 import { router } from "@routes/index"
 
 import '@libs/sequelize';
 import '@libs/kafka/kafka';
-import CreateManyTagsService from "@components/tags/services/createManyTags.service";
 
 const app: Application = express();
 app

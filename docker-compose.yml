@@ -1,4 +1,76 @@
 services:
+  api-gateway:
+    container_name: api-gateway-service_articles-platform
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    env_file:
+      - ./api-gateway/config/.env.dev
+    depends_on:
+      article-service:
+        condition: service_started
+      log-service:
+        condition: service_started
+    restart: unless-stopped
+
+
+  article-service:
+    container_name: article-service_articles-platform
+    build:
+      context: ./articles-service
+      dockerfile: Dockerfile
+    expose:
+      - '3001'
+    env_file:
+      - ./articles-service/config/.env.dev
+    depends_on:
+      kafka:
+        condition: service_healthy
+      article-service-db:
+        condition: service_started
+    restart: unless-stopped
+
+  log-service:
+    container_name: log-service_articles-platform
+    build:
+      context: ./log-service
+      dockerfile: Dockerfile
+    expose:
+      - '3002'
+    env_file:
+      - ./log-service/config/.env.dev
+    depends_on:
+      kafka:
+        condition: service_healthy
+      log-service-db:
+        condition: service_started
+    restart: unless-stopped
+
+  article-service-db:
+    container_name: article-service-database_articles-platform
+    image: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - article_db_data:/var/lib/postgresql/data
+    env_file:
+      - ./articles-service/config/.env.dev
+    restart: unless-stopped
+
+
+  log-service-db:
+    container_name: log-service-database_articles-platform
+    image: postgres
+    ports:
+      - '5433:5432'
+    volumes:
+      - log_db_data:/var/lib/postgresql/data
+    env_file:
+      - ./log-service/config/.env.dev
+    restart: unless-stopped
+
 
   kafka:
     image: bitnami/kafka:latest
@@ -58,7 +130,10 @@ services:
     restart: unless-stopped
 
 
+
 volumes:
+  article_db_data:
+  log_db_data:
   kafka_data:
   pgadmin:
 
