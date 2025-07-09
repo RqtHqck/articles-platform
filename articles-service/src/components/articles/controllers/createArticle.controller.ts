@@ -2,7 +2,6 @@ import {Request} from "express";
 import BaseController from '@classes/BaseController';
 import {CreateArticleService} from '../services';
 import {ICreateArticleDto} from "@entities/interfaces";
-import {TagEnum} from "@entities/enums";
 import logger from "@libs/logger";
 
 class CreateArticleController extends BaseController {

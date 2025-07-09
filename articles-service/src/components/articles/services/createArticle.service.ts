@@ -1,8 +1,8 @@
 import { ConflictError, BadRequestError } from '@errors/index';
 import {ArticleModel, ArticleTagModel} from '@components/articles/models';
 
-import {ICreateArticleDto, ITag} from "@entities/interfaces";
-import {TArticleTagsCreation, TTagCreation} from "@entities/types";
+import {ICreateArticleDto} from "@entities/interfaces";
+import {TArticleTagsCreation} from "@entities/types";
 import {TagModel} from "@components/tags/models";
 import { Op } from 'sequelize';
 import logger from "@libs/logger";

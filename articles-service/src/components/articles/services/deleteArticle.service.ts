@@ -1,5 +1,4 @@
 import { ArticleModel, ArticleTagModel } from '@components/articles/models';
-import { Op } from 'sequelize';
 import NotFoundError from "@errors/NotFoundError";
 import logger from "@libs/logger";
 

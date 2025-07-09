@@ -1,4 +1,3 @@
-import dotenv from "@libs/dotenv";
 import { ArticleModel } from '@components/articles/models';
 import NotFoundError from "@errors/NotFoundError";
 import {IArticle} from "@entities/interfaces";
