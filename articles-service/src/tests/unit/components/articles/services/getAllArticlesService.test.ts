@@ -3,10 +3,10 @@ import { ArticleModel } from "@components/articles/models";
 import { TagModel } from "@components/tags/models";
 
 jest.mock("@components/articles/models", () => ({
-    Article: { findAll: jest.fn() },
+    ArticleModel: { findAll: jest.fn() },
 }));
 jest.mock("@components/tags/models", () => ({
-    Tag: jest.fn(), // модель нам нужна просто для include, она не используется напрямую
+    TagModel: jest.fn(), // модель нам нужна просто для include, она не используется напрямую
 }));
 
 const mockedArticle = ArticleModel as jest.Mocked<typeof ArticleModel>;

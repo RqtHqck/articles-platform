@@ -3,7 +3,7 @@ import { ArticleModel } from "@components/articles/models";
 import { NotFoundError } from '@errors/index';
 
 jest.mock("@components/articles/models", () => ({
-    Article: {
+    ArticleModel: {
         findByPk: jest.fn(),
     },
 }));

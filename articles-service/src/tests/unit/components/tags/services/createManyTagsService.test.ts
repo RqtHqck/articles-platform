@@ -3,7 +3,7 @@ import { TagModel } from "@components/tags/models";
 import { TagEnum } from "@entities/enums";
 
 jest.mock("@components/tags/models", () => ({
-    Tag: {
+    TagModel: {
         bulkCreate: jest.fn(),
     },
 }));

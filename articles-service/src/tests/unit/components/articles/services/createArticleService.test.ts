@@ -7,11 +7,11 @@ import { Op } from 'sequelize';
 
 // Мокируем методы моделей, чтобы не дергать реальную базу
 jest.mock('@components/articles/models', () => ({
-    Article: { findOrCreate: jest.fn() },
-    ArticleTag: { bulkCreate: jest.fn() },
+    ArticleModel: { findOrCreate: jest.fn() },
+    ArticleTagModel: { bulkCreate: jest.fn() },
 }));
 jest.mock('@components/tags/models', () => ({
-    Tag: { findAll: jest.fn() },
+    TagModel: { findAll: jest.fn() },
 }));
 
 // Получаем типобезопасные ссылки на моки, чтобы TS не ругался

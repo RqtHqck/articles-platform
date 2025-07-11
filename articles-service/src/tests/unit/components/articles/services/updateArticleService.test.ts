@@ -5,17 +5,17 @@ import { Op } from "sequelize";
 import { NotFoundError, ConflictError, BadRequestError } from "@errors/index";
 
 jest.mock("@components/articles/models", () => ({
-    Article: {
+    ArticleModel: {
         findByPk: jest.fn(),
         findOne: jest.fn(),
     },
-    ArticleTag: {
+    ArticleTagModel: {
         destroy: jest.fn(),
         bulkCreate: jest.fn(),
     },
 }));
 jest.mock("@components/tags/models", () => ({
-    Tag: {
+    TagModel: {
         findAll: jest.fn(),
     },
 }));
