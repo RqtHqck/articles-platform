@@ -14,7 +14,11 @@ services:
       log-service:
         condition: service_started
     restart: unless-stopped
-
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -s http://localhost:3000/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
   article-service:
     container_name: article-service_articles-platform
@@ -31,6 +35,11 @@ services:
       article-service-db:
         condition: service_started
     restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -s http://localhost:3000/api/articles/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
   log-service:
     container_name: log-service_articles-platform
@@ -47,6 +56,32 @@ services:
       log-service-db:
         condition: service_started
     restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -s http://localhost:3000/api/logs/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  search-service:
+    container_name: search-service_articles-platform
+    build:
+      context: ./search-service
+      dockerfile: Dockerfile
+    expose:
+      - '3003'
+    env_file:
+      - ./search-service/config/.env.dev
+    depends_on:
+      kafka:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -s http://localhost:3000/api/search/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
   article-service-db:
     container_name: article-service-database_articles-platform
@@ -86,13 +121,13 @@ services:
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://kafka:9094
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
-      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@127.0.0.1:9093
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
       - BITNAMI_DEBUG=yes
       - KAFKA_BROKER_ID=1
       - KAFKA_CFG_NODE_ID=1
       - KAFKA_CFG_NUM_PARTITIONS=2
-      - KAFKA_KRAFT_CLUSTER_ID=0
+      - KAFKA_KRAFT_CLUSTER_ID=d9f4b3c5-80d3-4a8f-b1ad-555e19186e61
       - KAFKA_CFG_LOG_DIRS=/bitnami/kafka/data
     volumes:
       - kafka_data:/bitnami/kafka
@@ -103,11 +138,49 @@ services:
       retries: 10
 
 
+  elasticsearch:
+    container_name: elasticsearch-service_articles-platform
+    image: elasticsearch:8.13.4
+    ports:
+      - 9300:9300
+      - 9200:9200
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    env_file:
+      - ./search-service/config/.env.dev
+    environment:
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - xpack.security.enabled=true # auth required
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -s http://localhost:9200/_cluster/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+
+  kibana:
+    container_name: kibana-service_articles-platform
+    image: kibana:8.13.4
+    ports:
+      - 5601:5601
+    env_file:
+      - ./search-service/config/.env.dev
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      - ELASTICSEARCH_HOSTS=["http://elasticsearch:9200"]
+    logging:
+      driver: none
+
   kafka-ui:
     container_name: kafka-ui-service_articles-platform
     image: provectuslabs/kafka-ui:latest
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
     ports:
       - 8080:8080
     environment:
@@ -115,7 +188,8 @@ services:
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
       - DYNAMIC_CONFIG_ENABLED=true
       - LOGGING_LEVEL_ROOT=DEBUG
-
+    logging:
+      driver: none
 
 
   pgadmin:
@@ -128,12 +202,26 @@ services:
     ports:
       - "${PGADMIN_PORT:-5050}:80"
     restart: unless-stopped
+    logging:
+      driver: none
 
-
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock   # Доступ к системному Docker
+      - portainer_data:/data                        # Хранилище настроек Portainer
+    logging:
+      driver: none
 
 volumes:
   article_db_data:
   log_db_data:
+  elasticsearch_data:
+  portainer_data:
   kafka_data:
   pgadmin:
 
