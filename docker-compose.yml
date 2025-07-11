@@ -36,7 +36,7 @@ services:
         condition: service_started
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD-SHELL", "curl -s http://localhost:3000/api/articles/health || exit 1" ]
+      test: [ "CMD-SHELL", "curl -s http://article-service:3001/health || exit 1" ]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -57,7 +57,7 @@ services:
         condition: service_started
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD-SHELL", "curl -s http://localhost:3000/api/logs/health || exit 1" ]
+      test: [ "CMD-SHELL", "curl -s http://log-service:3002/health || exit 1" ]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -78,7 +78,7 @@ services:
         condition: service_healthy
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD-SHELL", "curl -s http://localhost:3000/api/search/health || exit 1" ]
+      test: [ "CMD-SHELL", "curl -s http://search-service:3003/health || exit 1" ]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -111,8 +111,8 @@ services:
     image: bitnami/kafka:latest
     container_name: kafka-service_articles-platform
     ports:
-      - "9092:9092"  # Приложения в Compose (kafka‑ui, микросервисы).
-      - "9094:9094"  # Локальные инструменты на хосте.
+      - "9092:9092"
+      - "9094:9094"
     environment:
       - KAFKA_ENABLE_KRAFT=yes
       - ALLOW_PLAINTEXT_LISTENER=yes
@@ -136,11 +136,12 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+    restart: unless-stopped
 
 
   elasticsearch:
     container_name: elasticsearch-service_articles-platform
-    image: elasticsearch:8.13.4
+    image: elasticsearch:9.0.3
     ports:
       - 9300:9300
       - 9200:9200
@@ -151,29 +152,27 @@ services:
     environment:
       - bootstrap.memory_lock=true
       - discovery.type=single-node
+      - xpack.security.enabled=false
+#      - ELASTIC_PASSWORD=changeme
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
-      - xpack.security.enabled=true # auth required
     healthcheck:
       test: [ "CMD-SHELL", "curl -s http://localhost:9200/_cluster/health || exit 1" ]
       interval: 10s
       timeout: 5s
       retries: 10
-
+    restart: unless-stopped
 
   kibana:
     container_name: kibana-service_articles-platform
-    image: kibana:8.13.4
+    image: kibana:9.0.3
     ports:
       - 5601:5601
-    env_file:
-      - ./search-service/config/.env.dev
     depends_on:
       elasticsearch:
         condition: service_healthy
     environment:
-      - ELASTICSEARCH_HOSTS=["http://elasticsearch:9200"]
-    logging:
-      driver: none
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    restart: unless-stopped
 
   kafka-ui:
     container_name: kafka-ui-service_articles-platform
@@ -190,6 +189,7 @@ services:
       - LOGGING_LEVEL_ROOT=DEBUG
     logging:
       driver: none
+    restart: unless-stopped
 
 
   pgadmin:
