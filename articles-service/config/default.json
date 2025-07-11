@@ -17,6 +17,7 @@
 		"PORT": 29092,
 		"CLIENT": "course-service",
 		"ACTION_TOPIC": "action-logged",
+		"ARTICLE_CREATED_TOPIC": "article-created",
 		"GROUP_ID": "group"
 	}
 }

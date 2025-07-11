@@ -6,6 +6,7 @@ import {TArticleTagsCreation} from "@entities/types";
 import {TagModel} from "@components/tags/models";
 import { Op } from 'sequelize';
 import logger from "@libs/logger";
+import articleCreatedEvent from "@libs/kafka/producers/articleCreated";
 
 const CreateArticleService = async (
     createData: ICreateArticleDto,
@@ -48,7 +49,7 @@ const CreateArticleService = async (
     
     await ArticleTagModel.bulkCreate(articleTags as TArticleTagsCreation[], { ignoreDuplicates: true })
 
-
+    await articleCreatedEvent(article);
 };
 
 export default CreateArticleService;

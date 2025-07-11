@@ -14,7 +14,6 @@ export interface IUpdateArticleDto {
 }
 
 
-
 export interface IArticle {
     id?: number;
     title: string;

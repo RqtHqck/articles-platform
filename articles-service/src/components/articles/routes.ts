@@ -1,8 +1,7 @@
 import express from 'express';
 import {
-    CreateArticleController, DeleteArticleController, GetAllArticlesController, UpdateArticleController
+    CreateArticleController, DeleteArticleController, GetAllArticlesController, UpdateArticleController, GetArticleByIdController
 } from './controllers';
-import GetArticleByIdController from "@components/articles/controllers/getArticleById.controller";
 
 const router = express.Router();
 

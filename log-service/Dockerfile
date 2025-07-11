@@ -1,6 +1,9 @@
-FROM node:22-slim
+FROM node:22-alpine
 
 WORKDIR /app/log-service
+
+# curl
+RUN apk add --no-cache curl
 
 COPY package*.json ./
 
