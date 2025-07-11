@@ -10,7 +10,7 @@ import proxy from "express-http-proxy";
 import logger from "@libs/logger";
 import {rateLimitOptions} from "@libs/rateLimit";
 import { ErrorsHandlerMiddleware } from '@middlewares/ErrorHandler';
-import {appRouter} from "./router";
+import {router} from "./routes";
 
 
 const app: Application = express();
@@ -25,11 +25,12 @@ app
     }))
     // .use(rateLimitOptions);
 
-console.log(process.env.ARTICLES_SERVICE_URL)
+app.use(router);
+
 app.use('/api/articles',
     proxy(process.env.ARTICLES_SERVICE_URL!, {
         proxyReqPathResolver: (req) => {
-            console.log("API-GATEWAY -> ARTICLES-SERVICE");
+            logger.info("API-GATEWAY -> ARTICLES-SERVICE");
             return req.url;
         },
         proxyErrorHandler: (err, res, next) => {
@@ -37,9 +38,20 @@ app.use('/api/articles',
             next(err);
         }
     }));
-app.use('/search', proxy(process.env.SEARCH_SERVICE_URL!));
-app.use('/logs', proxy(process.env.LOGS_SERVICE_URL!));
-app.use(appRouter);
+
+app.use('/api/search', proxy(process.env.SEARCH_SERVICE_URL!, {
+    proxyReqPathResolver: (req) => {
+        logger.info("API-GATEWAY -> SEARCH-SERVICE");
+        return req.url;
+    },
+}));
+
+app.use('/api/logs', proxy(process.env.LOGS_SERVICE_URL!, {
+    proxyReqPathResolver: (req) => {
+        logger.info("API-GATEWAY -> LOGS-SERVICE");
+        return req.url;
+    },
+}));
 
 app.use(ErrorsHandlerMiddleware);
 
