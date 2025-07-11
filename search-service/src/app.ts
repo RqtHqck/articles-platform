@@ -9,12 +9,12 @@ import helmet from "helmet";
 import cors from "cors";
 import logger from "@libs/logger";
 import {ErrorsHandlerMiddleware} from "@middlewares/ErrorHandler";
+import config from "config";
 import { router } from "@routes/index"
 
 import '@libs/kafka/kafka';
-import config from "config";
+import "@libs/elasticsearch"
 import consumeArticleCreatedEvent from "@libs/kafka/consumers/handleArticleCreated";
-import {createIndex} from "@libs/elasticsearch/createIndex";
 
 const app: Application = express();
 app
@@ -36,6 +36,5 @@ app.use(ErrorsHandlerMiddleware);
 // App
 app.listen(config.get<string>("SERVER.PORT")!, async () => {
     logger.info(`Search Service running on port ${config.get<string>("SERVER.PORT")}`);
-    await createIndex(config.get<string>('ELASTICSEARCH.ARTICLES_INDEX'));
     await consumeArticleCreatedEvent();
 });

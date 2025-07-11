@@ -22,8 +22,6 @@
 	},
 	"ELASTICSEARCH": {
 		"URL": "http://localhost:9200",
-		"USERNAME": "elastic",
-		"PASSWORD": "changeme",
 		"ARTICLES_INDEX": "article"
 	}
 }
