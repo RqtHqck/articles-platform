@@ -1,113 +1,76 @@
-export const Article = {
+export const LogSchema = {
     type: "object",
-    required: ["id", "title", "content", "publishedAt", "updatedAt"],
+    required: ["id", "source", "message", "createdAt"],
     properties: {
         id: {
             type: "integer",
             format: "int32",
             example: 123,
-            description: "Уникальный идентификатор статьи",
+            description: "Уникальный идентификатор записи лога",
         },
-        title: {
+        source: {
             type: "string",
-            maxLength: 255,
-            example: "Заголовок статьи",
-            description: "Уникальный заголовок статьи",
+            maxLength: 100,
+            example: "api-gateway",
+            description: "Источник лога (сервис или модуль)",
         },
-        content: {
+        message: {
             type: "string",
-            example: "Текст статьи...",
-            description: "Основное содержание статьи",
+            example: "Ошибка подключения к базе данных",
+            description: "Текст сообщения лога",
         },
-        publishedAt: {
-            type: "string",
-            format: "date-time",
-            example: "2025-07-02T12:34:56Z",
-            description: "Дата публикации (создания) статьи",
-        },
-        updatedAt: {
+        createdAt: {
             type: "string",
             format: "date-time",
-            example: "2025-07-03T15:20:00Z",
-            description: "Дата последнего обновления статьи",
-        },
-        tags: {
-            type: "array",
-            description: "Массив связанных тегов",
-            items: {
-                type: "object",
-                properties: {
-                    id: {
-                        type: "integer",
-                        example: 7,
-                    },
-                    name: {
-                        type: "string",
-                        example: "tech",
-                    },
-                },
-            },
+            example: "2025-07-12T14:00:00Z",
+            description: "Дата и время создания записи",
         },
     },
-}
+};
 
-export const ArticleCreateDto = {
+export const LogGetAllSchema = {
     type: "object",
-        required: ["title", "content", "tags"],
-        properties: {
-        title: {
-            type: "string",
-                description: "Уникальный заголовок статьи",
-                example: "Some new article"
-        },
-        content: {
-            type: "string",
-                description: "Содержимое статьи",
-                example: "Текст статьи"
-        },
-        tags: {
-            type: "array",
-                description: "Массив ID тегов, которые должны существовать в системе",
-                items: {
-                type: "integer",
-                    example: 1
-            },
-            minItems: 1
-        }
-    }
-}
-
-export const ArticleUpdateDto = {
-    type: "object",
-    required: ["title", "content", "tags"],
+    required: ["page", "limit", "offset", "logs"],
     properties: {
-        title: {
-            type: "string",
-            description: "Новый уникальный заголовок статьи",
-            example: "Some article updated"
+        page: {
+            type: "number",
+            description: "Номер страницы",
+            example: 1
         },
-        content: {
-            type: "string",
-            description: "Обновлённое содержимое статьи",
-            example: "Обновленный текст статьи"
+        limit: {
+            type: "number",
+            description: "Количество документов на странице",
+            example: 3
         },
-        tags: {
+        offset: {
+            type: "number",
+            description: "Смещение по страницам",
+            example: 0
+        },
+        logs: {
             type: "array",
-            description: "Массив ID тегов, все должны существовать в системе",
+            description: "Массив логов",
             items: {
-                type: "integer",
-                example: 1
-            },
-            minItems: 1
+                $ref: "#/components/schemas/Log"
+            }
         }
     }
 }
 
-export const ErrorResponse = {
+
+
+export const ErrorSchema = {
     type: "object",
-        properties: {
+    properties: {
         code: { type: "string", example: "bad_request_error" },
         text: { type: "string", example: "Некорректные tag id" },
         data: { type: "object", description: "Дополнительные данные об ошибке", nullable: true }
+    }
+}
+
+export const SuccessSchema = {
+    type: "object",
+    properties: {
+        status: { type: "string", example: "OK" },
     }
 }

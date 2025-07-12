@@ -1,51 +1,57 @@
 import swaggerJSDoc from 'swagger-jsdoc';
 import * as fs from "node:fs";
 import path from "path";
-import {Article, ArticleCreateDto, ArticleUpdateDto, ErrorResponse} from "@libs/swagger/schemas";
-import { UnauthorizedResponse, BadRequestResponse, ConflictResponse, ForbiddenResponse,
-    NotFoundResponse, ValidationErrorResponse, InternalServerErrorResponse,
+import {
+    ErrorSchema, SuccessSchema, LogSchema, LogGetAllSchema
+} from "@libs/swagger/schemas";
+import {
+    UnauthorizedErrorResponse, BadRequestErrorResponse, ConflictErrorResponse, ForbiddenErrorResponse,
+    NotFoundErrorResponse, ValidationErrorResponse, InternalServerErrorResponse, SuccessResponse,
 } from '@libs/swagger/responses';
+
 
 const swaggerOptions = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'ARTICLES RESTfull API',
+            title: 'LOGS RESTFULL API',
             version: '1.0.0',
             description: 'REST API with Swagger doc',
         },
         tags: [
             {
-                name: 'articles',
-                description: 'Articles API',
+                name: 'logs',
+                description: 'Logs API',
             },
         ],
         servers: [
             {
-                url: "http://localhost:3000/api/articles",
+                url: "http://localhost:3000/api/logs",
                 description: "API Gateway endpoint"
             }
         ],
         components: {
             schemas: {
-                Article,
-                ArticleCreateDto,
-                ArticleUpdateDto,
-                ErrorResponse
+                Log: LogSchema,
+                LogGetAllList: LogGetAllSchema,
+                Success: SuccessSchema,
+                Error: ErrorSchema
             },
             responses: {
-                Unauthorized:        UnauthorizedResponse,
-                BadRequest:          BadRequestResponse,
-                Conflict:            ConflictResponse,
-                Forbidden:           ForbiddenResponse,
-                NotFound:            NotFoundResponse,
-                ValidationError:     ValidationErrorResponse,
-                InternalServerError: InternalServerErrorResponse
+                SuccessResponse,
+                UnauthorizedError:        UnauthorizedErrorResponse,
+                BadRequestError:          BadRequestErrorResponse,
+                ConflictError:            ConflictErrorResponse,
+                ForbiddenError:           ForbiddenErrorResponse,
+                NotFoundError:            NotFoundErrorResponse,
+                ValidationError:          ValidationErrorResponse,
+                InternalServerError:      InternalServerErrorResponse
             }
         }
     },
     apis: [
-        path.resolve(__dirname, '../../components/articles/routes.js'),
+        path.resolve(__dirname, '../../components/logs/routes.js'),
+        path.resolve(__dirname, '../../routes/app.routes.js'),
     ],
 }
 

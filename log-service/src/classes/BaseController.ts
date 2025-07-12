@@ -38,7 +38,7 @@ export default abstract class BaseController {
     }
 
     // Обязательно переопределять в наследниках
-    abstract controller(req: Request): Promise<any>;
+    abstract controller(req: Request, res: Response): Promise<any>;
 
     // // Приватный метод для логирования в Kafka, если есть сессия
     // async #logKafka(req: Request): Promise<void> {
@@ -103,11 +103,8 @@ export default abstract class BaseController {
                 });
             }
 
-            // await this.#logKafka(req);
+            await this.controller(req, res);
 
-            const result = await this.controller(req);
-
-            res.status(200).send(result);
         } catch (error) {
             next(error);
         }
