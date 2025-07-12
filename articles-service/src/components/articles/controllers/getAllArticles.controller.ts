@@ -1,4 +1,4 @@
-import { Request } from "express";
+import {Request, Response} from "express";
 import BaseController from "@classes/BaseController";
 import { GetAllArticlesService } from "../services";
 import logger from "@libs/logger";
@@ -15,7 +15,7 @@ class GetAllArticlesController extends BaseController {
         };
     }
 
-    async controller(req: Request) {
+    async controller(req: Request, res: Response): Promise<void> {
         logger.info("GetAllArticlesController")
 
         const limit = req.query.limit ? Number(req.query.limit) : 10;
@@ -23,7 +23,7 @@ class GetAllArticlesController extends BaseController {
 
         const result = await GetAllArticlesService({ limit, page });
 
-        return result;
+        res.status(201).json(result);
     }
 }
 

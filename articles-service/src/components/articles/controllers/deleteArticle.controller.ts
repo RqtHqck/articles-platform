@@ -1,4 +1,4 @@
-import { Request } from "express";
+import {Request, Response} from "express";
 import BaseController from "@classes/BaseController";
 import { DeleteArticleService } from "../services";
 import logger from "@libs/logger";
@@ -13,13 +13,13 @@ class DeleteArticleController extends BaseController {
         };
     }
 
-    async controller(req: Request): Promise<string> {
+    async controller(req: Request, res: Response): Promise<void> {
         logger.info("DeleteArticleController")
         const { id } = req.params;
 
         await DeleteArticleService(Number(id));
 
-        return 'DELETED';
+        res.status(204).json({status: 'OK'});
     }
 }
 

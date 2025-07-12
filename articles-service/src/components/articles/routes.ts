@@ -17,19 +17,14 @@ const router = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/ArticleCreateDto'
+ *             $ref: '#/components/schemas/ArticleCreate'
  *     responses:
  *       201:
- *         description: Article created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: string
- *               example: "OK"
+ *         $ref: '#/components/responses/SuccessResponse'
  *       400:
- *         $ref: '#/components/responses/BadRequest'
+ *         $ref: '#/components/responses/BadRequestError'
  *       409:
- *         $ref: '#/components/responses/Conflict'
+ *         $ref: '#/components/responses/ConflictError'
  *       422:
  *         $ref: '#/components/responses/ValidationError'
  */
@@ -55,9 +50,9 @@ router.post(
  *         description: Numeric ID of the article to delete
  *     responses:
  *       204:
- *         description: Article deleted successfully (no content)
+ *         $ref: '#/components/responses/SuccessResponse'
  *       404:
- *         $ref: '#/components/responses/NotFound'
+ *         $ref: '#/components/responses/NotFoundError'
  *       422:
  *         $ref: '#/components/responses/ValidationError'
  */
@@ -96,7 +91,7 @@ router.delete(
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Article'
+ *                 $ref: '#/components/schemas/ArticleGetAllList'
  *       422:
  *         $ref: '#/components/responses/ValidationError'
  */
@@ -129,7 +124,7 @@ router.get(
  *             schema:
  *               $ref: '#/components/schemas/Article'
  *       404:
- *         $ref: '#/components/responses/NotFound'
+ *         $ref: '#/components/responses/NotFoundError'
  *       422:
  *         $ref: '#/components/responses/ValidationError'
  */
@@ -158,21 +153,16 @@ router.get(
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/ArticleUpdateDto'
+ *             $ref: '#/components/schemas/ArticleUpdate'
  *     responses:
  *       200:
- *         description: Article updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: string
- *               example: "UPDATED"
+ *         $ref: '#/components/responses/SuccessResponse'
  *       400:
- *         $ref: '#/components/responses/BadRequest'
+ *         $ref: '#/components/responses/BadRequestError'
  *       404:
- *         $ref: '#/components/responses/NotFound'
+ *         $ref: '#/components/responses/NotFoundError'
  *       409:
- *         $ref: '#/components/responses/Conflict'
+ *         $ref: '#/components/responses/ConflictError'
  *       422:
  *         $ref: '#/components/responses/ValidationError'
  */

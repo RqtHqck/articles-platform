@@ -1,4 +1,4 @@
-export const Article = {
+export const ArticleSchema = {
     type: "object",
     required: ["id", "title", "content", "publishedAt", "updatedAt"],
     properties: {
@@ -51,33 +51,62 @@ export const Article = {
     },
 }
 
-export const ArticleCreateDto = {
+export const ArticleCreateSchema = {
     type: "object",
-        required: ["title", "content", "tags"],
-        properties: {
+    required: ["title", "content", "tags"],
+    properties: {
         title: {
             type: "string",
-                description: "Уникальный заголовок статьи",
-                example: "Some new article"
+            description: "Уникальный заголовок статьи",
+            example: "Some new article"
         },
         content: {
             type: "string",
-                description: "Содержимое статьи",
-                example: "Текст статьи"
+            description: "Содержимое статьи",
+            example: "Текст статьи"
         },
         tags: {
             type: "array",
-                description: "Массив ID тегов, которые должны существовать в системе",
-                items: {
+            description: "Массив ID тегов, которые должны существовать в системе",
+            items: {
                 type: "integer",
-                    example: 1
+                example: 1
             },
             minItems: 1
         }
     }
 }
 
-export const ArticleUpdateDto = {
+export const ArticleGetAllSchema = {
+    type: "object",
+    required: ["page", "limit", "offset", "articles"],
+    properties: {
+        page: {
+            type: "number",
+            description: "Номер страницы",
+            example: 1
+        },
+        limit: {
+            type: "number",
+            description: "Количество документов на странице",
+            example: 3
+        },
+        offset: {
+            type: "number",
+            description: "Смещение по страницам",
+            example: 0
+        },
+        articles: {
+            type: "array",
+            description: "Массив статей",
+            items: {
+                $ref: "#/components/schemas/Article"
+            }
+        }
+    }
+}
+
+export const ArticleUpdateSchema = {
     type: "object",
     required: ["title", "content", "tags"],
     properties: {
@@ -103,11 +132,18 @@ export const ArticleUpdateDto = {
     }
 }
 
-export const ErrorResponse = {
+export const ErrorSchema = {
     type: "object",
-        properties: {
+    properties: {
         code: { type: "string", example: "bad_request_error" },
         text: { type: "string", example: "Некорректные tag id" },
         data: { type: "object", description: "Дополнительные данные об ошибке", nullable: true }
+    }
+}
+
+export const SuccessSchema = {
+    type: "object",
+    properties: {
+        status: { type: "string", example: "OK" },
     }
 }

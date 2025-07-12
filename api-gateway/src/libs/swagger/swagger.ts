@@ -29,8 +29,8 @@ const swaggerOptions = {
         ],
         components: {
             schemas: {
-                ErrorResponse:   ErrorSchema,
-                SuccessResponse: SuccessSchema
+                ErrorSchema,
+                SuccessSchema
             },
             responses: {
                 SuccessResponse:          SuccessResponse,

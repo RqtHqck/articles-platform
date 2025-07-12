@@ -1,8 +1,8 @@
-import {Request} from "express";
 import BaseController from '@classes/BaseController';
 import {CreateArticleService} from '../services';
 import {ICreateArticleDto} from "@entities/interfaces";
 import logger from "@libs/logger";
+import { Request, Response, NextFunction } from 'express';
 
 class CreateArticleController extends BaseController {
     get bodySchema() {
@@ -22,13 +22,13 @@ class CreateArticleController extends BaseController {
         };
     }
 
-    async controller(req: Request): Promise<string> {
+    async controller(req: Request, res: Response): Promise<void> {
         logger.info("CreateArticleController")
         const updateData = req.body as ICreateArticleDto;
 
         await CreateArticleService(updateData);
 
-        return 'OK';
+        res.status(201).json({status: 'OK'});
     }
 }
 

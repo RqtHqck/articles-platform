@@ -1,4 +1,4 @@
-import { Request } from "express";
+import {Request, Response} from "express";
 import BaseController from "@classes/BaseController";
 import GetArticleByIdService from "../services/getArticleByIdService.service";
 import logger from "@libs/logger";
@@ -13,12 +13,14 @@ class GetArticleByIdController extends BaseController {
         };
     }
 
-    async controller(req: Request): Promise<any> {
+    async controller(req: Request, res: Response): Promise<any> {
         logger.info("GetArticleByIdController")
 
         const { id } = req.params;
 
-        return await GetArticleByIdService(Number(id));
+        const result = await GetArticleByIdService(Number(id));
+
+        res.status(201).json(result);
     }
 }
 

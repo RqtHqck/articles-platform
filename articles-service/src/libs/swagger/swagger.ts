@@ -1,9 +1,12 @@
 import swaggerJSDoc from 'swagger-jsdoc';
 import * as fs from "node:fs";
 import path from "path";
-import {Article, ArticleCreateDto, ArticleUpdateDto, ErrorResponse} from "@libs/swagger/schemas";
-import { UnauthorizedResponse, BadRequestResponse, ConflictResponse, ForbiddenResponse,
-    NotFoundResponse, ValidationErrorResponse, InternalServerErrorResponse,
+import {
+    ArticleSchema, ArticleGetAllSchema, ArticleCreateSchema, ArticleUpdateSchema, ErrorSchema, SuccessSchema
+} from "@libs/swagger/schemas";
+import {
+    UnauthorizedErrorResponse, BadRequestErrorResponse, ConflictErrorResponse, ForbiddenErrorResponse,
+    NotFoundErrorResponse, ValidationErrorResponse, InternalServerErrorResponse, SuccessResponse,
 } from '@libs/swagger/responses';
 
 const swaggerOptions = {
@@ -28,24 +31,28 @@ const swaggerOptions = {
         ],
         components: {
             schemas: {
-                Article,
-                ArticleCreateDto,
-                ArticleUpdateDto,
-                ErrorResponse
+                Article: ArticleSchema,
+                ArticleCreate: ArticleCreateSchema,
+                ArticleUpdate: ArticleUpdateSchema,
+                ArticleGetAllList: ArticleGetAllSchema,
+                Success: SuccessSchema,
+                Error: ErrorSchema
             },
             responses: {
-                Unauthorized:        UnauthorizedResponse,
-                BadRequest:          BadRequestResponse,
-                Conflict:            ConflictResponse,
-                Forbidden:           ForbiddenResponse,
-                NotFound:            NotFoundResponse,
-                ValidationError:     ValidationErrorResponse,
-                InternalServerError: InternalServerErrorResponse
+                SuccessResponse,
+                UnauthorizedError:        UnauthorizedErrorResponse,
+                BadRequestError:          BadRequestErrorResponse,
+                ConflictError:            ConflictErrorResponse,
+                ForbiddenError:           ForbiddenErrorResponse,
+                NotFoundError:            NotFoundErrorResponse,
+                ValidationError:          ValidationErrorResponse,
+                InternalServerError:      InternalServerErrorResponse
             }
         }
     },
     apis: [
         path.resolve(__dirname, '../../components/articles/routes.js'),
+        path.resolve(__dirname, '../../routes/app.routes.js'),
     ],
 }
 

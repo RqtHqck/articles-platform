@@ -1,4 +1,4 @@
-import { Request } from "express";
+import {Request, Response} from "express";
 import BaseController from "@classes/BaseController";
 import { UpdateArticleService } from "../services";
 import {IUpdateArticleDto} from "@entities/interfaces";
@@ -30,14 +30,14 @@ class UpdateArticleController extends BaseController {
         };
     }
 
-    async controller(req: Request) {
+    async controller(req: Request, res: Response):Promise<void> {
         const { id } = req.params;
 
         const updateData = req.body as IUpdateArticleDto;
 
         await UpdateArticleService(Number(id), updateData);
 
-        return "UPDATED";
+        res.status(200).json({status: 'OK'});
     }
 }
 

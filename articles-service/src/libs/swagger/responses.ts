@@ -1,8 +1,21 @@
-/** Стандартная схема ошибки уже есть → используем $ref */
-const JSON_ERROR_REF = { schema: { $ref: '#/components/schemas/ErrorResponse' } };
+const JSON_ERROR_REF = { schema: { $ref: '#/components/schemas/Error' } };
+const JSON_SUCCESS_REF = { schema: { $ref: '#/components/schemas/Success' } };
+
+export const SuccessResponse = {
+    description: 'Сервис работает корректно',
+    content: {
+        'application/json': {
+            ...JSON_SUCCESS_REF,
+            example: {
+                status: 'OK'
+            }
+        }
+    }
+};
+
 
 /** 401 */
-export const UnauthorizedResponse = {
+export const UnauthorizedErrorResponse = {
     description: 'Authorization error',
     content: {
         'application/json': {
@@ -17,7 +30,7 @@ export const UnauthorizedResponse = {
 };
 
 /** 400 */
-export const BadRequestResponse = {
+export const BadRequestErrorResponse = {
     description: 'Bad Request error',
     content: {
         'application/json': {
@@ -32,7 +45,7 @@ export const BadRequestResponse = {
 };
 
 /** 409 */
-export const ConflictResponse = {
+export const ConflictErrorResponse = {
     description: 'Conflict error',
     content: {
         'application/json': {
@@ -47,7 +60,7 @@ export const ConflictResponse = {
 };
 
 /** 403 */
-export const ForbiddenResponse = {
+export const ForbiddenErrorResponse = {
     description: 'Forbidden error',
     content: {
         'application/json': {
@@ -62,7 +75,7 @@ export const ForbiddenResponse = {
 };
 
 /** 404 */
-export const NotFoundResponse = {
+export const NotFoundErrorResponse = {
     description: 'Not Found error',
     content: {
         'application/json': {
@@ -105,3 +118,4 @@ export const InternalServerErrorResponse = {
         }
     }
 };
+
