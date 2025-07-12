@@ -53,6 +53,13 @@ app.use('/api/logs', proxy(process.env.LOGS_SERVICE_URL!, {
     },
 }));
 
+app.use('/api', proxy(process.env.APP_ORIGIN_URL!, {
+    proxyReqPathResolver: (req) => {
+        logger.info("API-GATEWAY");
+        return req.url;
+    },
+}));
+
 app.use(ErrorsHandlerMiddleware);
 
 app.listen(process.env.PORT, () => {
