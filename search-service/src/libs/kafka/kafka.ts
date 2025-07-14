@@ -77,6 +77,7 @@ class Kafka {
             });
         } catch (err) {
             logger.error(err as Error);
+            throw err;
         }
     }
 }

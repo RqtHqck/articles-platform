@@ -13,7 +13,7 @@ import config from "config";
 import { router } from "@routes/index"
 
 import '@libs/kafka/kafka';
-import "@libs/elasticsearch"
+import "@libs/elasticsearch";
 import consumeArticleCreatedEvent from "@libs/kafka/consumers/handleArticleCreated";
 
 const app: Application = express();

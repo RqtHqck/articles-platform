@@ -13,6 +13,12 @@ export interface IUpdateArticleDto {
     tags: number[];
 }
 
+export interface IArticleCreatedEvent {
+    id?: number;
+    title: string;
+    content: string;
+    tags: TagEnum[]
+}
 
 export interface IArticle {
     id?: number;

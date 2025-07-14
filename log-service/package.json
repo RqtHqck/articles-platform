@@ -75,7 +75,7 @@
     "@controllers": "./dist/controllers/",
     "@services": "./dist/services/",
     "@models": "./dist/models",
-    "@utils": "./dist/utils",
+    "@helpers": "./dist/helpers",
     "@entities": "./dist/entities/",
     "@middlewares": "./dist/middlewares/"
   }

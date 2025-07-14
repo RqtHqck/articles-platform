@@ -53,6 +53,8 @@ services:
     depends_on:
       kafka:
         condition: service_healthy
+      article-service:
+        condition: service_started
       log-service-db:
         condition: service_started
     restart: unless-stopped
@@ -75,6 +77,8 @@ services:
       kafka:
         condition: service_healthy
       elasticsearch:
+        condition: service_healthy
+      article-service:
         condition: service_healthy
     restart: unless-stopped
     healthcheck:
@@ -114,6 +118,8 @@ services:
       - "9092:9092"
       - "9094:9094"
     environment:
+      - BITNAMI_DEBUG=yes
+      - KAFKAJS_NO_PARTITIONER_WARNING=1
       - KAFKA_ENABLE_KRAFT=yes
       - ALLOW_PLAINTEXT_LISTENER=yes
       - KAFKA_CFG_PROCESS_ROLES=broker,controller
@@ -123,10 +129,9 @@ services:
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
-      - BITNAMI_DEBUG=yes
       - KAFKA_BROKER_ID=1
       - KAFKA_CFG_NODE_ID=1
-      - KAFKA_CFG_NUM_PARTITIONS=2
+      - KAFKA_CFG_NUM_PARTITIONS=1
       - KAFKA_KRAFT_CLUSTER_ID=d9f4b3c5-80d3-4a8f-b1ad-555e19186e61
       - KAFKA_CFG_LOG_DIRS=/bitnami/kafka/data
     volumes:

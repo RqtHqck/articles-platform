@@ -6,19 +6,13 @@
 		"LOGS_SERVICE_URL": "http://localhost:3002",
 		"SEARCH_SERVICE_URL": "http://localhost:3003"
 	},
-	"DATABASE": {
-		"PORT": 5432,
-		"HOST": "localhost",
-		"DIALECT": "postgres",
-		"NAME": "dbname"
-	},
 	"KAFKA": {
 		"HOST": "localhost",
 		"PORT": 29092,
 		"CLIENT": "search-service",
-		"ACTION_TOPIC": "action-logged",
-		"ARTICLE_CREATED_TOPIC": "article-created",
-		"GROUP_ID": "service"
+		"ACTION_TOPIC": "action.log",
+		"ARTICLE_CREATED_TOPIC": "article.created",
+		"GROUP_ID": "search-group"
 	},
 	"ELASTICSEARCH": {
 		"URL": "http://localhost:9200",

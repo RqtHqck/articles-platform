@@ -16,7 +16,7 @@
 		"HOST": "localhost",
 		"PORT": 29092,
 		"CLIENT": "course-service",
-		"ACTION_TOPIC": "action-logged",
-		"GROUP_ID": "group"
+		"ACTION_TOPIC": "action.log",
+		"GROUP_ID": "log-group"
 	}
 }
