@@ -4,12 +4,19 @@ import logger from "@libs/logger";
 import config from "config";
 
 export default async function addToArticleIndex(articleDto: IArticle) {
-    logger.info(`addToArticleIndex: article: ${JSON.stringify(articleDto)}`);
+    try {
+        logger.info(`addToArticleIndex: article: ${JSON.stringify(articleDto)}`);
 
-    const result = await esClient.index({
-        index: config.get<string>('ELASTICSEARCH.ARTICLES_INDEX'),
-        document: articleDto,
-    });
+        const result = await esClient.index({
+            index: config.get<string>('ELASTICSEARCH.ARTICLES_INDEX'),
+            document: articleDto,
+            refresh: 'wait_for', // for using in search as it will add
+        });
 
-    logger.info('Article added:', result);
+        logger.info('Article added:', result);
+    } catch (err) {
+        logger.error(err);
+        throw err;
+    }
+
 }

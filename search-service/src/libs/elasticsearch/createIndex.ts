@@ -14,7 +14,8 @@ export async function createIndex(index: string): Promise<void> {
             properties: {
                 id: {type: 'keyword'},
                 title: {type: 'text'},
-                content: {type: 'text'}
+                content: {type: 'text'},
+                tags: {type: "keyword"},
             }
         }
     })
