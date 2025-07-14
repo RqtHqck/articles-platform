@@ -6,7 +6,7 @@ import {TArticleTagsCreation} from "@entities/types";
 import {TagModel} from "@components/tags/models";
 import { Op } from 'sequelize';
 import logger from "@libs/logger";
-import articleCreatedEvent from "@libs/kafka/producers/articleCreated";
+import articleCreatedHandler from "@libs/kafka/producers/articles/articleCreatedHandler";
 
 const CreateArticleService = async (
     createData: ICreateArticleDto,
@@ -51,7 +51,7 @@ const CreateArticleService = async (
 
     const articleTagsNames = tagsFound.map(tag => tag.label)
 
-    await articleCreatedEvent({id: article.id, title: article.title, content: article.content, tags: articleTagsNames} as IArticleCreatedEvent);
+    await articleCreatedHandler({id: article.id, title: article.title, content: article.content, tags: articleTagsNames} as IArticleCreatedEvent);
 };
 
 export default CreateArticleService;

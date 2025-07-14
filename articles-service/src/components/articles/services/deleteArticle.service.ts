@@ -1,6 +1,8 @@
 import { ArticleModel, ArticleTagModel } from '@components/articles/models';
 import NotFoundError from "@errors/NotFoundError";
 import logger from "@libs/logger";
+import articleDeletedHandler from "@libs/kafka/producers/articles/articleDeletedHandler";
+
 
 const DeleteArticleService = async (id: number): Promise<void> => {
     logger.info("DeleteArticleService");
@@ -18,6 +20,8 @@ const DeleteArticleService = async (id: number): Promise<void> => {
 
     // Удалить статью
     await ArticleModel.destroy({ where: { id } });
+
+    await articleDeletedHandler(id);
 };
 
 export default DeleteArticleService;

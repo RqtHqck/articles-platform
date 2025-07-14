@@ -5,6 +5,7 @@ import NotFoundError from "@errors/NotFoundError";
 import ConflictError from "@errors/ConflictError";
 import BadRequestError from "@errors/BadRequestError";
 import { ICreateArticleDto } from "@entities/interfaces";
+import articleUpdatedHandler from "@libs/kafka/producers/articles/articleUpdatedHandler";
 
 const UpdateArticleService = async (
     id: number,
@@ -64,6 +65,9 @@ const UpdateArticleService = async (
     }));
 
     await ArticleTagModel.bulkCreate(newTags);
+
+    const tagsFoundNames = tagsFound.map(tag => tag.label);
+    await articleUpdatedHandler({ id, title, content, tags: tagsFoundNames });
 };
 
 export default UpdateArticleService;

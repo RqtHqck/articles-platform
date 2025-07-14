@@ -20,6 +20,14 @@ export interface IArticleCreatedEvent {
     tags: TagEnum[]
 }
 
+export interface IArticleUpdatedEvent {
+    id?: number;
+    title?: string;
+    content?: string;
+    tags?: TagEnum[]
+}
+
+
 export interface IArticle {
     id?: number;
     title: string;

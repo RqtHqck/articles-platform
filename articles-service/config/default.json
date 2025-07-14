@@ -18,6 +18,8 @@
 		"CLIENT": "course-service",
 		"ACTION_TOPIC": "action.log",
 		"ARTICLE_CREATED_TOPIC": "article.created",
+		"ARTICLE_DELETED_TOPIC": "article.deleted",
+		"ARTICLE_UPDATED_TOPIC": "article.updated",
 		"GROUP_ID": "article-group"
 	}
 }
