@@ -14,7 +14,7 @@ import { router } from "@routes/index"
 
 import '@libs/kafka/kafka';
 import "@libs/elasticsearch";
-import consumeArticleCreatedEvent from "@libs/kafka/consumers/handleArticleCreated";
+import startKafkaConsumers from "@libs/kafka/consumers";
 
 const app: Application = express();
 app
@@ -36,5 +36,5 @@ app.use(ErrorsHandlerMiddleware);
 // App
 app.listen(config.get<string>("SERVER.PORT")!, async () => {
     logger.info(`Search Service running on port ${config.get<string>("SERVER.PORT")}`);
-    await consumeArticleCreatedEvent();
+    await startKafkaConsumers();
 });

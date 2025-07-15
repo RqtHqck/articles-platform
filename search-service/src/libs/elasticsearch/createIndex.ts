@@ -8,6 +8,7 @@ export async function createIndex(index: string): Promise<void> {
         return;
     }
 
+    // Создаём инекс
     await esClient.indices.create({
         index,
         mappings: {
@@ -26,5 +27,4 @@ export async function deleteIndex(index: string): Promise<void> {
         index
     })
     logger.info('Index deleted:', result);
-
 }
