@@ -1,4 +1,4 @@
-import { Kafka as KafkaJs, Producer, Consumer, Message } from 'kafkajs';
+import {Kafka as KafkaJs, Producer, Consumer, Message, ConsumerSubscribeTopics, ConsumerSubscribeTopic} from 'kafkajs';
 import config from 'config';
 import logger from '@libs/logger';
 
@@ -10,8 +10,9 @@ interface KafkaMessage {
 class Kafka {
     private kafka: KafkaJs;
     private producer: Producer;
-    private consumer: Consumer | null = null;
-    private isConnected = false;
+    private consumer: Consumer;
+    private isProducerConnected = false;
+    private isConsumerConnected = false;
 
     constructor() {
         this.kafka = new KafkaJs({
@@ -19,23 +20,29 @@ class Kafka {
             brokers: [`${config.get<string>('KAFKA.HOST')}:${config.get<number>('KAFKA.PORT')}`],
         });
         this.producer = this.kafka.producer();
+        this.consumer = this.kafka.consumer({ groupId: config.get<string>('KAFKA.GROUP_ID') });
     }
 
-    public async connect(): Promise<void> {
-        try {
-            if (this.isConnected) return;
 
-            logger.info('Connecting to Kafka broker...');
-            await this.producer.connect();
-            this.isConnected = true;
-        } catch (error) {
-            logger.error('Kafka connection failed', error as Error);
-        }
+    private async connectProducer(): Promise<void> {
+        if (this.isProducerConnected) return;
+        await this.producer.connect();
+        this.isProducerConnected = true;
+        logger.info('Kafka producer connected');
     }
+
+
+    private async connectConsumer(): Promise<void> {
+        if (this.isConsumerConnected) return;
+        await this.consumer.connect();
+        this.isConsumerConnected = true;
+        logger.info('Kafka consumer connected');
+    }
+
 
     public async produce(topic: string, messages: KafkaMessage[]): Promise<void> {
         try {
-            await this.connect();
+            await this.connectProducer();
 
             const formattedMessages = messages.map(msg => ({
                 key: msg.key,
@@ -51,14 +58,17 @@ class Kafka {
         }
     }
 
-    public async consume(topic: string, callback: (msg: any) => Promise<void>): Promise<void> {
-        try {
-            if (!this.consumer) {
-                this.consumer = this.kafka.consumer({ groupId: config.get<string>('KAFKA.GROUP_ID') });
-                await this.consumer.connect();
-            }
 
-            await this.consumer.subscribe({ topic, fromBeginning: true });
+    public async subscribe(options: ConsumerSubscribeTopics |  ConsumerSubscribeTopic): Promise<void> {
+        await this.connectConsumer();
+
+        await this.consumer!.subscribe(options);
+    }
+
+
+    public async consume(callbackMap: Record<string, (msg: any) => Promise<void>>): Promise<void> {
+        try {
+            await this.connectConsumer();
 
             await this.consumer.run({
                 eachMessage: async ({ topic, partition, message }) => {
@@ -72,7 +82,14 @@ class Kafka {
                     const parsedMessage = JSON.parse(message.value.toString());
                     logger.info(`message: ${JSON.stringify(parsedMessage)}`);
 
-                    await callback(parsedMessage);
+                    const handler = callbackMap[topic];
+
+                    if (!handler) {
+                        logger.warn(`No handler for topic ${topic}`);
+                        return;
+                    }
+
+                    await handler(parsedMessage);
                 },
             });
         } catch (err) {
@@ -83,9 +100,5 @@ class Kafka {
 }
 
 const kafka = new Kafka();
-
-kafka.connect()
-    .then(() => logger.info('Successful connect to Kafka'))
-    .catch(err => logger.error(err as Error));
 
 export default kafka;
