@@ -6,7 +6,6 @@ export interface ICreateArticleDto {
     tags: number[];
 }
 
-
 export interface IUpdateArticleDto {
     title: string;
     content: string;
@@ -26,7 +25,6 @@ export interface IArticleUpdatedEvent {
     content?: string;
     tags?: TagEnum[]
 }
-
 
 export interface IArticle {
     id?: number;

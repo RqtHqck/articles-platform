@@ -51,7 +51,7 @@ const CreateArticleService = async (
 
     const articleTagsNames = tagsFound.map(tag => tag.label)
 
-    await articleCreatedHandler({id: article.id, title: article.title, content: article.content, tags: articleTagsNames} as IArticleCreatedEvent);
+    await articleCreatedHandler({id: article.id, title, content, tags: articleTagsNames} as IArticleCreatedEvent);
 };
 
 export default CreateArticleService;

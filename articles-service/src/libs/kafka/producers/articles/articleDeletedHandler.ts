@@ -2,12 +2,12 @@ import config from 'config';
 import logger from '@libs/logger';
 import kafka from '@libs/kafka/kafka';
 
-export default async function articleDeletedHandler(articleId: number): Promise<void> {
+export default async function articleDeletedHandler(id: number): Promise<void> {
     try {
         const message = {
             key: null,
             value: {
-                articleId
+                id
             },
         };
 
