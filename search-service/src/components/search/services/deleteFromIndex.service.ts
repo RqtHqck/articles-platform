@@ -2,7 +2,7 @@ import esClient from "@libs/elasticsearch/elasticsearch";
 import logger from "@libs/logger";
 import config from "config";
 
-export default async function deleteFromArticleIndex({ id }: { id: number }): Promise<void> {
+export default async function deleteFromArticleIndexService({ id }: { id: number }): Promise<void> {
     try {
         logger.info(`deleteFromArticleIndex: articleId: ${JSON.stringify(id)}`);
 

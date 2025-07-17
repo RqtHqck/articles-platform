@@ -39,18 +39,26 @@ app.use('/api/articles',
         }
     }));
 
-app.use('/api/search', proxy(process.env.SEARCH_SERVICE_URL!, {
-    proxyReqPathResolver: (req) => {
-        logger.info("API-GATEWAY -> SEARCH-SERVICE");
-        return req.url;
-    },
-}));
-
 app.use('/api/logs', proxy(process.env.LOGS_SERVICE_URL!, {
     proxyReqPathResolver: (req) => {
         logger.info("API-GATEWAY -> LOGS-SERVICE");
         return req.url;
     },
+    proxyErrorHandler: (err, res, next) => {
+        logger.info("Something went wrong when appeal to " + process.env.LOGS_SERVICE_URL!)
+        next(err);
+    }
+}));
+
+app.use('/api/search', proxy(process.env.SEARCH_SERVICE_URL!, {
+    proxyReqPathResolver: (req) => {
+        logger.info("API-GATEWAY -> SEARCH-SERVICE");
+        return req.url;
+    },
+    proxyErrorHandler: (err, res, next) => {
+        logger.info("Something went wrong when appeal to " + process.env.SEARCH_SERVICE_URL!)
+        next(err);
+    }
 }));
 
 app.use('/api', proxy(process.env.APP_ORIGIN_URL!, {
@@ -58,6 +66,10 @@ app.use('/api', proxy(process.env.APP_ORIGIN_URL!, {
         logger.info("API-GATEWAY");
         return req.url;
     },
+    proxyErrorHandler: (err, res, next) => {
+        logger.info("Something went wrong when appeal to " + process.env.PORT!)
+        next(err);
+    }
 }));
 
 app.use(ErrorsHandlerMiddleware);
@@ -65,6 +77,6 @@ app.use(ErrorsHandlerMiddleware);
 app.listen(process.env.PORT, () => {
     logger.info(`API Gateway is running on port ${process.env.PORT}`);
     logger.info(`Articles microservice is running on port ${process.env.ARTICLES_SERVICE_URL}`);
-    logger.info(`Search microservice is running on port ${process.env.SEARCH_SERVICE_URL}`);
     logger.info(`Logs microservice is running on port ${process.env.LOGS_SERVICE_URL}`);
+    logger.info(`Search microservice is running on port ${process.env.SEARCH_SERVICE_URL}`);
 });

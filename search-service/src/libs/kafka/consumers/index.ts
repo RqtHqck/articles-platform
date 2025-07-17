@@ -1,4 +1,4 @@
-import {addToArticleIndex, updateIndex, deleteFromArticleIndex} from "@components/search/services";
+import {addToArticleIndexService, updateArticleIndexService, deleteFromArticleIndexService} from "@components/search/services";
 
 import kafka from "@libs/kafka/kafka";
 import config from "config";
@@ -14,9 +14,9 @@ export default async function startKafkaConsumers(): Promise<any> {
 
         await retry(async () => {
             await kafka.consume({
-                [articleCreatedTopic]: addToArticleIndex,
-                [articleUpdatedTopic]: updateIndex,
-                [articleDeletedTopic]: deleteFromArticleIndex,
+                [articleCreatedTopic]: addToArticleIndexService,
+                [articleUpdatedTopic]: updateArticleIndexService,
+                [articleDeletedTopic]: deleteFromArticleIndexService,
             });
         }, 5, 2500)
     } catch (err) {

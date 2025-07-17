@@ -3,7 +3,7 @@ import logger from "@libs/logger";
 import config from "config";
 import {IArticleUpdatedEvent} from "@entities/interfaces";
 
-export default async function updateIndex(articleDto: IArticleUpdatedEvent): Promise<void> {
+export default async function updateIndexService(articleDto: IArticleUpdatedEvent): Promise<void> {
     try {
         logger.info(`deleteFromArticleIndex: articleId: ${JSON.stringify(articleDto.id)}`);
 

@@ -3,7 +3,7 @@ import esClient from "@libs/elasticsearch/elasticsearch";
 import logger from "@libs/logger";
 import config from "config";
 
-export default async function addToArticleIndex(articleDto: IArticleCreatedEvent): Promise<void> {
+export default async function addToArticleIndexService(articleDto: IArticleCreatedEvent): Promise<void> {
     try {
         logger.info(`addToArticleIndex: article: ${JSON.stringify(articleDto)}`);
 

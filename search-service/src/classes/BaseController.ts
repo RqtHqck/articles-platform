@@ -38,17 +38,8 @@ export default abstract class BaseController {
     }
 
     // Обязательно переопределять в наследниках
-    abstract controller(req: Request): Promise<any>;
+    abstract controller(req: Request, res: Response): Promise<any>;
 
-    // // Приватный метод для логирования в Kafka, если есть сессия
-    // async #logKafka(req: Request): Promise<void> {
-    //     const session = req.state?.user;
-    //     if (session) {
-    //         // Здесь можно заменить console.log на logger.info если нужно
-    //         console.log('session', session);
-    //         await produceHandlerActionLog(req);
-    //     }
-    // }
 
     // Форматируем ошибки в удобный объект
     #buildRequestError(error: ErrorObject): ValidateErrorObject {
@@ -90,7 +81,6 @@ export default abstract class BaseController {
         return errorsList;
     }
 
-    // Основной метод запуска контроллера
     async run(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const errorsList = this.validate(req);
@@ -103,11 +93,8 @@ export default abstract class BaseController {
                 });
             }
 
-            // await this.#logKafka(req);
+            await this.controller(req, res);
 
-            const result = await this.controller(req);
-
-            res.status(200).send(result);
         } catch (error) {
             next(error);
         }
