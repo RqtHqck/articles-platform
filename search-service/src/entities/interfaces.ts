@@ -9,15 +9,19 @@ export interface IArticle {
 }
 
 export interface IArticleCreatedEvent {
-    id?: number;
+    id: number;
     title: string;
     content: string;
-    tags: TagEnum[]
+    tags: TagEnum[];
+    publishedAt: Date;
+    updatedAt: Date;
 }
 
 export interface IArticleUpdatedEvent {
-    id?: number;
-    title?: string;
-    content?: string;
-    tags?: TagEnum[]
+    id: number;
+    title: string;
+    content: string;
+    tags: TagEnum[];
+    publishedAt: Date;
+    updatedAt: Date;
 }

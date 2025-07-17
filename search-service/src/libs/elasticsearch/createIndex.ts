@@ -17,6 +17,8 @@ export async function createIndex(index: string): Promise<void> {
                 title: {type: 'text'},
                 content: {type: 'text'},
                 tags: {type: "keyword"},
+                publishedAt: {type: "date"},
+                updatedAt: {type: "date"}
             }
         }
     })

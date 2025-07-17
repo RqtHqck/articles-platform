@@ -2,6 +2,8 @@ import { ArticleModel, ArticleTagModel } from '@components/articles/models';
 import NotFoundError from "@errors/NotFoundError";
 import logger from "@libs/logger";
 import articleDeletedHandler from "@libs/kafka/producers/articles/articleDeletedHandler";
+import sequelize from "@libs/sequelize";
+import {Transaction} from "sequelize";
 
 
 const DeleteArticleService = async (id: number): Promise<void> => {
@@ -14,14 +16,15 @@ const DeleteArticleService = async (id: number): Promise<void> => {
             text:`Статья с id=${id} не найдена`
         });
     }
+    await sequelize.transaction(async (transaction: Transaction): Promise<void> => {
+        // Удалить связи с тегами
+        await ArticleTagModel.destroy({ where: { articleId: id }, transaction });
 
-    // Удалить связи с тегами
-    await ArticleTagModel.destroy({ where: { articleId: id } });
+        // Удалить статью
+        await ArticleModel.destroy({ where: { id }, transaction });
 
-    // Удалить статью
-    await ArticleModel.destroy({ where: { id } });
-
-    await articleDeletedHandler(id);
+        await articleDeletedHandler(id);
+    })
 };
 
 export default DeleteArticleService;
