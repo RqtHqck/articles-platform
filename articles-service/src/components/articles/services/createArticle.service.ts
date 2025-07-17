@@ -1,7 +1,7 @@
 import { ConflictError, BadRequestError } from '@errors/index';
 import {ArticleModel, ArticleTagModel} from '@components/articles/models';
 
-import {IArticleCreatedEvent, ICreateArticleDto} from "@entities/interfaces";
+import {IArticleCreatedEvent, ICreateArticleDto, ITag} from "@entities/interfaces";
 import {TArticleTagsCreation} from "@entities/types";
 import {TagModel} from "@components/tags/models";
 import {Op, Transaction} from 'sequelize';
@@ -37,7 +37,6 @@ const CreateArticleService = async (
                 title,
                 content,
             },
-            raw: true,
             transaction
         });
 
@@ -52,13 +51,14 @@ const CreateArticleService = async (
 
         await ArticleTagModel.bulkCreate(articleTagsIds as TArticleTagsCreation[], { ignoreDuplicates: true, transaction});
 
-        const articleTagsNames = tagsFound.map(tag => tag.label)
+
 
         await articleCreatedHandler({
             id: article.id,
             title,
             content,
-            tags: articleTagsNames,
+            tags: tagsFound.map(tag => ({id: tag.id, label: tag.label} as unknown as ITag)), // ITag
+            createdAt: article.createdAt,
             publishedAt: article.publishedAt,
             updatedAt: article.updatedAt
         } as IArticleCreatedEvent);

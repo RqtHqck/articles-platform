@@ -16,7 +16,7 @@ export interface IArticleCreatedEvent {
     id: number;
     title: string;
     content: string;
-    tags: TagEnum[];
+    tags: ITag[];
     publishedAt: Date;
     updatedAt: Date;
 }
@@ -25,7 +25,7 @@ export interface IArticleUpdatedEvent {
     id: number;
     title: string;
     content: string;
-    tags: TagEnum[];
+    tags: ITag[];
     publishedAt: Date;
     updatedAt: Date;
 }

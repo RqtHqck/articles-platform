@@ -4,7 +4,7 @@ import {Op, Transaction} from "sequelize";
 import NotFoundError from "@errors/NotFoundError";
 import ConflictError from "@errors/ConflictError";
 import BadRequestError from "@errors/BadRequestError";
-import {IArticleUpdatedEvent, ICreateArticleDto} from "@entities/interfaces";
+import {IArticleUpdatedEvent, ICreateArticleDto, ITag} from "@entities/interfaces";
 import articleUpdatedHandler from "@libs/kafka/producers/articles/articleUpdatedHandler";
 import sequelize from "@libs/sequelize";
 
@@ -79,12 +79,11 @@ const UpdateArticleService = async (
 
         await ArticleTagModel.bulkCreate(newTags, { transaction });
 
-        const tagsFoundNames = tagsFound.map(tag => tag.label);
         await articleUpdatedHandler({
             id,
             title,
             content,
-            tags: tagsFoundNames,
+            tags: tagsFound.map(tag => ({id: tag.id, label: tag.label} as unknown as ITag)), // ITag
             publishedAt: updatedRows[0].publishedAt,
             updatedAt: updatedRows[0].updatedAt
         } as IArticleUpdatedEvent);

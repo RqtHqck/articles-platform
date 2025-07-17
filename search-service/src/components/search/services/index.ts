@@ -1,5 +1,8 @@
-import addToArticleIndex from "@components/search/services/addToIndex";
-import deleteFromArticleIndex from "@components/search/services/deleteFromIndex";
-import updateIndex from "@components/search/services/updateIndex";
+import addToArticleIndexService from "@components/search/services/addToIndex.service";
+import deleteFromArticleIndexService from "@components/search/services/deleteFromIndex.service";
+import updateArticleIndexService from "@components/search/services/updateIndex.service";
+import searchArticlesByQueryService from "@components/search/services/searchArticles.service";
 
-export { addToArticleIndex, deleteFromArticleIndex, updateIndex};
+export { addToArticleIndexService, deleteFromArticleIndexService, updateArticleIndexService,
+    searchArticlesByQueryService,
+};

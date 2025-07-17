@@ -38,3 +38,10 @@ export enum TagEnum {
     CAREER = 'career',
     TIPS = 'tips',
 }
+
+export enum ES_SortTypeEnum {
+    PUBLISHED_AT = 'c',
+    UPDATED_AT = 'updatedAt',
+    ID = 'id',
+    RELEVANCE = 'relevance',
+}

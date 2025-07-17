@@ -1,4 +1,4 @@
-import {TagEnum} from "@entities/enums";
+import {ES_SortTypeEnum, TagEnum} from "@entities/enums";
 
 export interface IArticle {
     id?: number;
@@ -8,11 +8,16 @@ export interface IArticle {
     updatedAt: Date;
 }
 
+export interface ITag {
+    id?: string;
+    label: TagEnum;
+}
+
 export interface IArticleCreatedEvent {
     id: number;
     title: string;
     content: string;
-    tags: TagEnum[];
+    tags: ITag[];
     publishedAt: Date;
     updatedAt: Date;
 }
@@ -21,7 +26,16 @@ export interface IArticleUpdatedEvent {
     id: number;
     title: string;
     content: string;
-    tags: TagEnum[];
+    tags: ITag[];
     publishedAt: Date;
     updatedAt: Date;
 }
+
+export interface ISearchQueryData {
+    query: string;
+    tags?: TagEnum[];
+    page?: number | string;
+    limit?: number | string;
+    sort?: ES_SortTypeEnum;
+}
+

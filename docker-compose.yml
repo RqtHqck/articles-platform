@@ -210,17 +210,17 @@ services:
     logging:
       driver: none
 
-  portainer:
-    image: portainer/portainer-ce:latest
-    container_name: portainer
-    restart: always
-    ports:
-      - "9000:9000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock   # Доступ к системному Docker
-      - portainer_data:/data                        # Хранилище настроек Portainer
-    logging:
-      driver: none
+  # portainer:
+  #   image: portainer/portainer-ce:latest
+  #   container_name: portainer
+  #   restart: always
+  #   ports:
+  #     - "9000:9000"
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock   # Доступ к системному Docker
+  #     - portainer_data:/data                        # Хранилище настроек Portainer
+  #   logging:
+  #     driver: none
 
 volumes:
   article_db_data:
