@@ -12,7 +12,7 @@ export interface IUpdateArticleDto {
     tags: number[];
 }
 
-export interface IArticleCreatedEvent {
+export interface IArticleEventDto {
     id: number;
     title: string;
     content: string;
@@ -21,14 +21,8 @@ export interface IArticleCreatedEvent {
     updatedAt: Date;
 }
 
-export interface IArticleUpdatedEvent {
-    id: number;
-    title: string;
-    content: string;
-    tags: ITag[];
-    publishedAt: Date;
-    updatedAt: Date;
-}
+export interface IArticleCreatedEvent extends IArticleEventDto {}
+export interface IArticleUpdatedEvent extends IArticleEventDto {}
 
 export interface IArticle {
     id?: number;

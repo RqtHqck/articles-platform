@@ -1,3 +1,5 @@
+import {IArticle} from "@entities/interfaces";
+
 type TError = {
     code: string;
     text: string;
@@ -6,4 +8,11 @@ type TError = {
 
 type TErrorData = Record<string, any>;
 
-export { TError, TErrorData };
+type SearchArticlesControllerResponse = {
+    page: number;
+    limit: number;
+    offset: number;
+    articles: IArticle[]
+}
+
+export { TError, TErrorData, SearchArticlesControllerResponse };

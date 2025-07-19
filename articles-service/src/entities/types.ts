@@ -1,4 +1,4 @@
-import {ILog, ITag} from "@entities/interfaces";
+import {IArticle, ILog, ITag} from "@entities/interfaces";
 
 type TError = {
     code: string;
@@ -16,5 +16,11 @@ export type TArticleTagsCreation = {
 }
 export type TLogCreateDto = Pick<ILog, 'message' | 'source'>;
 
+export type GetAllArticlesControllerResponse = {
+    page: number;
+    limit: number;
+    offset: number;
+    articles: IArticle[]
+}
 
 export { TError, TErrorData };
