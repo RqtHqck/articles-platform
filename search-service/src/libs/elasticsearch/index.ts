@@ -1,7 +1,6 @@
 import esClient from "./elasticsearch";
 import {createIndex} from "./createIndex";
 import logger from "@libs/logger";
-import config from "config";
 import {MappingTypeMapping} from "@elastic/elasticsearch/lib/api/types";
 
 (async () => {
@@ -15,7 +14,7 @@ import {MappingTypeMapping} from "@elastic/elasticsearch/lib/api/types";
         })
 
     await createIndex(
-        config.get<string>('ELASTICSEARCH.ARTICLES_INDEX'),
+        process.env.ELASTIC_ARTICLES_INDEX!,
         {
             properties: {
                 id: {type: 'integer'},

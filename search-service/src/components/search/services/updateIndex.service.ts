@@ -1,6 +1,5 @@
 import esClient from "@libs/elasticsearch/elasticsearch";
 import logger from "@libs/logger";
-import config from "config";
 import {IArticleUpdatedEvent} from "@entities/interfaces";
 
 export default async function updateIndexService(articleDto: IArticleUpdatedEvent): Promise<void> {
@@ -9,7 +8,7 @@ export default async function updateIndexService(articleDto: IArticleUpdatedEven
 
         const result = await esClient.update(
             {
-                index: config.get<string>('ELASTICSEARCH.ARTICLES_INDEX'),
+                index: process.env.ELASTIC_ARTICLES_INDEX!,
                 id: String(articleDto.id),
                 doc: articleDto,
                 refresh: true,
@@ -17,7 +16,7 @@ export default async function updateIndexService(articleDto: IArticleUpdatedEven
             }
         );
 
-        logger.info(`Article updated in index ${config.get<string>('ELASTICSEARCH.ARTICLES_INDEX')}:`, result);
+        logger.info(`Article updated in index ${process.env.ELASTIC_ARTICLES_INDEX!}:`, result);
     } catch (err) {
         logger.error(err);
         throw err;

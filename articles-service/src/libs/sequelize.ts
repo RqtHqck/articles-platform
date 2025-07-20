@@ -1,17 +1,16 @@
 import { Sequelize } from 'sequelize-typescript';
-import config from 'config';
 import logger from '@libs/logger';
 import {ArticleModel} from "@components/articles/models";
 import {TagModel} from "@components/tags/models";
 import {ArticleTagModel} from "@components/articles/models";
 
 const sequelize = new Sequelize(
-    config.get<string>('DATABASE.NAME'),
-    config.get<string>('DATABASE.USER'),
-    config.get<string>('DATABASE.PASSWORD'),
+    process.env.POSTGRES_DB!,
+    process.env.POSTGRES_USER!,
+    process.env.POSTGRES_PASSWORD!,
     {
-        host: config.get<string>('DATABASE.HOST'),
-        dialect: config.get('DATABASE.DIALECT'),
+        host: process.env.DB_HOST!,
+        dialect: 'postgres',
         timezone: '+03:00',
         pool: {
             max: 5,
@@ -30,14 +29,14 @@ const sequelize = new Sequelize(
 sequelize
     .authenticate()
     .then(() => {
-        logger.info(`Successful connect to database postgresql "${config.get<string>('DATABASE.NAME')}"`);
+        logger.info(`Successful connect to database postgresql "${process.env.POSTGRES_DB!}"`);
         return sequelize.sync({ force: false });
     })
     .then(() => {
         logger.info(`Successful synchronized with database postgresql`);
     })
     .catch((err: Error) => {
-        logger.error(`Failed to connect to database "${config.get<string>('DATABASE.NAME')}": ${err.message}`);
+        logger.error(`Failed to connect to database "${process.env.POSTGRES_DB!}": ${err.message}`);
     });
 
 export default sequelize;

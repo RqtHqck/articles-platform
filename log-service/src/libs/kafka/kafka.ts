@@ -1,5 +1,4 @@
-import { Kafka as KafkaJs, Producer, Consumer, Message } from 'kafkajs';
-import config from 'config';
+import { Kafka as KafkaJs, Producer, Consumer } from 'kafkajs';
 import logger from '@libs/logger';
 
 interface KafkaMessage {
@@ -15,8 +14,8 @@ class Kafka {
 
     constructor() {
         this.kafka = new KafkaJs({
-            clientId: config.get<string>('KAFKA.CLIENT'),
-            brokers: [`${config.get<string>('KAFKA.HOST')}:${config.get<number>('KAFKA.PORT')}`],
+            clientId: process.env.KAFKA_CLIENT,
+            brokers: [`${process.env.KAFKA_HOST}:${process.env.KAFKA_PORT}`],
         });
         this.producer = this.kafka.producer();
     }
@@ -54,7 +53,7 @@ class Kafka {
     public async consume(topic: string, callback: (msg: any) => Promise<void>): Promise<void> {
         try {
             if (!this.consumer) {
-                this.consumer = this.kafka.consumer({ groupId: config.get<string>('KAFKA.GROUP_ID') });
+                this.consumer = this.kafka.consumer({ groupId: process.env.KAFKA_GROUP_ID! });
                 await this.consumer.connect();
             }
 

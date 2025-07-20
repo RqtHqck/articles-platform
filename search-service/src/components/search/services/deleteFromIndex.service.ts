@@ -1,6 +1,5 @@
 import esClient from "@libs/elasticsearch/elasticsearch";
 import logger from "@libs/logger";
-import config from "config";
 
 export default async function deleteFromArticleIndexService({ id }: { id: number }): Promise<void> {
     try {
@@ -8,13 +7,13 @@ export default async function deleteFromArticleIndexService({ id }: { id: number
 
         const result = await esClient.delete(
             {
-                index: config.get<string>('ELASTICSEARCH.ARTICLES_INDEX'),
+                index: process.env.ELASTIC_ARTICLES_INDEX!,
                 id: String(id),
                 refresh: true
             }
         );
 
-        logger.info(`Article deleted from index ${config.get<string>('ELASTICSEARCH.ARTICLES_INDEX')}:`, result);
+        logger.info(`Article deleted from index ${process.env.ELASTIC_ARTICLES_INDEX}: `, result);
     } catch (err) {
         logger.error(err);
         throw err;

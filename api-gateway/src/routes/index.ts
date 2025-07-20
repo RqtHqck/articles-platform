@@ -1,5 +1,4 @@
 import Express from "express";
-// import searchRoutes from "@components/search/routes";
 import appRoutes from "@routes/app.routes";
 import swaggerRoutes from "./swagger.routes";
 

@@ -1,4 +1,3 @@
-import config from 'config';
 import logger from '@libs/logger';
 import kafka from '@libs/kafka/kafka';
 import {IArticleCreatedEvent} from "@entities/interfaces";
@@ -12,9 +11,9 @@ export default async function articleCreatedHandler(articleDto: IArticleCreatedE
             },
         };
 
-        await kafka.produce(config.get<string>('KAFKA.ARTICLE_CREATED_TOPIC'), [message]);
-        logger.info(`Sent to kafka topic ${config.get<string>('KAFKA.ARTICLE_CREATED_TOPIC')}`);
+        await kafka.produce(process.env.KAFKA_ARTICLE_CREATED_TOPIC!, [message]);
+        logger.info(`Sent to kafka topic ${process.env.KAFKA_ARTICLE_CREATED_TOPIC!}`);
     } catch (err) {
-        throw new Error(`Ошибка при отправке в топик Kafka ${config.get<string>('KAFKA.ARTICLE_CREATED_TOPIC')}`)
+        throw new Error(`Ошибка при отправке в топик Kafka ${process.env.KAFKA_ARTICLE_CREATED_TOPIC!}`)
     }
 }

@@ -1,4 +1,3 @@
-import config from 'config';
 import logger from '@libs/logger';
 import kafka from '@libs/kafka/kafka';
 import {IArticleUpdatedEvent} from "@entities/interfaces";
@@ -12,9 +11,9 @@ export default async function articleUpdatedHandler(articleDto: IArticleUpdatedE
             },
         };
 
-        await kafka.produce(config.get<string>('KAFKA.ARTICLE_UPDATED_TOPIC'), [message]);
-        logger.info(`Sent to kafka topic ${config.get<string>('KAFKA.ARTICLE_UPDATED_TOPIC')}`);
+        await kafka.produce(process.env.KAFKA_ARTICLE_UPDATED_TOPIC!, [message]);
+        logger.info(`Sent to kafka topic ${process.env.KAFKA_ARTICLE_UPDATED_TOPIC!}`);
     } catch (err) {
-        throw new Error(`Ошибка при отправке в топик Kafka ${config.get<string>('KAFKA.ARTICLE_UPDATED_TOPIC')}`)
+        throw new Error(`Ошибка при отправке в топик Kafka ${process.env.KAFKA_ARTICLE_UPDATED_TOPIC!}`)
     }
 }

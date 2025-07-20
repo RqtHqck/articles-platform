@@ -24,7 +24,7 @@ app
     .use(cookieParser())
     .use(helmet())
     .use(cors({
-        origin: process.env.APP_ORIGIN_URL,
+        origin: process.env.APP_ORIGIN_URL!,
         methods: ['GET', 'DELETE'],
     }))
 
@@ -33,7 +33,7 @@ app.use(router);
 // Errors
 app.use(ErrorsHandlerMiddleware);
 // App
-app.listen(process.env.PORT!, async () => {
-    logger.info(`Log Service running on port ${process.env.PORT}`);
+app.listen(process.env.CONTAINER_PORT!, async () => {
+    logger.info(`Log Service running on port ${process.env.CONTAINER_PORT!}`);
     await consumeServicesLogs();
 });

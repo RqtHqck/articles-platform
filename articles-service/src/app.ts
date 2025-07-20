@@ -33,7 +33,7 @@ app.use(router);
 // Errors
 app.use(ErrorsHandlerMiddleware);
 
-app.listen(process.env.PORT!, async () => {
-    logger.info(`Article Service running on port ${process.env.PORT}`);
+app.listen(process.env.CONTAINER_PORT!, async () => {
+    logger.info(`Article Service running on port ${process.env.CONTAINER_PORT}`);
     await CreateManyTagsService();
 });

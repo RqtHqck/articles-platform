@@ -1,12 +1,9 @@
 import esClient from "@libs/elasticsearch/elasticsearch";
 import logger from "@libs/logger";
-import config from "config";
 import {ES_SortTypeEnum} from "@entities/enums";
 import {IArticlesSearchResultES, ISearchQueryData} from "@entities/interfaces";
 import {SearchHit, SearchResponseBody} from "@elastic/elasticsearch/lib/api/types";
 import {SearchArticlesControllerResponse} from "@entities/types";
-
-
 
 
 export default async function searchArticlesService(queryData: ISearchQueryData): Promise<SearchArticlesControllerResponse> {
@@ -50,7 +47,7 @@ export default async function searchArticlesService(queryData: ISearchQueryData)
     };
 
     const result: SearchResponseBody = await esClient.search({
-        index: config.get<string>('ELASTICSEARCH.ARTICLES_INDEX'),
+        index: process.env.ELASTIC_ARTICLES_INDEX!,
         query: queryBody,
         from: offset,
         size: limitNum,
