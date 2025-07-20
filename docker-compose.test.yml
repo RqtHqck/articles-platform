@@ -1,12 +1,14 @@
 services:
-  postgres-test:
-    image: postgres:15
-    container_name: article-service-test-database_articles-platform
-    environment:
-      POSTGRES_USER: test
-      POSTGRES_PASSWORD: test
-      POSTGRES_DB: articles-platform-test-db
+  api-gateway:
+    container_name: api-gateway-service_articles-platform_test
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
     ports:
-      - "5433:5432"
-    volumes:
-      - ./pgdata_test:/var/lib/postgresql/data
+      - '${HOST_PORT_API_GATEWAY}:${CONTAINER_PORT_API_GATEWAY}'
+    env_file:
+      - ./api-gateway/config/.env.test
+    environment:
+      NODE_ENV: test
+    command: npm run start:dev
+    restart: on-failure

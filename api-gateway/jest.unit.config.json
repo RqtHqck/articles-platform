@@ -1,0 +1,22 @@
+{
+  "preset": "ts-jest",
+  "testEnvironment": "node",
+  "roots": [
+    "<rootDir>/src/tests/unit"
+  ],
+  "moduleFileExtensions": ["ts", "js"],
+  "moduleNameMapper": {
+    "^@helpers/(.*)$": "<rootDir>/src/helpers/$1",
+    "^@components/(.*)$": "<rootDir>/src/components/$1",
+    "^@entities/(.*)$": "<rootDir>/src/entities/$1",
+    "^@errors/(.*)$": "<rootDir>/src/errors/$1",
+    "^@classes/(.*)$": "<rootDir>/src/classes/$1",
+    "^@libs/(.*)$": "<rootDir>/src/libs/$1",
+    "^@routes/(.*)$": "<rootDir>/src/routes/$1",
+    "^@tests/(.*)$": "<rootDir>/src/tests/$1",
+    "^@middlewares/(.*)$": "<rootDir>/src/middlewares/$1"
+  },
+  "transform": {
+    "^.+\\.tsx?$": ["ts-jest", { "tsconfig": "tsconfig.json" }]
+  }
+}
