@@ -63,10 +63,6 @@ services:
     depends_on:
       kafka:
         condition: service_healthy
-      article-service:
-        condition: service_started
-      search-service:
-        condition: service_started
       log-service-db:
         condition: service_started
     command: npm run start:dev
@@ -92,8 +88,6 @@ services:
       kafka:
         condition: service_healthy
       elasticsearch:
-        condition: service_healthy
-      article-service:
         condition: service_healthy
     command: npm run start:dev
     restart: unless-stopped

@@ -5,11 +5,11 @@ import ArticleTagModel from '@components/articles/models/ArticleTag.model';
 
 const sequelize = new Sequelize({
     dialect: 'postgres',
-    host: 'localhost',
-    port: 5433,
-    username: 'test',
-    password: 'test',
-    database: 'articles-platform-test-db',
+    host: process.env.DB_HOST!,
+    port: parseInt(process.env.DB_PORT!),
+    username: process.env.POSTGRES_USER!,
+    password: process.env.POSTGRES_PASSWORD!,
+    database: process.env.POSTGRES_DB!,
     logging: false,
     models: [ArticleModel, TagModel, ArticleTagModel],  // Регистрируем модели здесь
     define: {

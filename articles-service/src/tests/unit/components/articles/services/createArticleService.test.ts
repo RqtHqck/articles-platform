@@ -1,87 +1,110 @@
-import {CreateArticleService} from "@components/articles/services";
+import CreateArticleService from '@components/articles/services/createArticle.service';
+import { ArticleModel, ArticleTagModel } from '@components/articles/models';
+import { TagModel } from '@components/tags/models';
+import articleCreatedHandler from '@libs/kafka/producers/articles/articleCreatedHandler';
+import sequelize from '@libs/sequelize';
 import { ConflictError, BadRequestError } from '@errors/index';
-import { ArticleModel, ArticleTagModel } from "@components/articles/models";
-import { TagModel } from "@components/tags/models";
-import { Model } from "sequelize";
-import { Op } from 'sequelize';
 
-// Мокируем методы моделей, чтобы не дергать реальную базу
-jest.mock('@components/articles/models', () => ({
-    ArticleModel: { findOrCreate: jest.fn() },
-    ArticleTagModel: { bulkCreate: jest.fn() },
-}));
-jest.mock('@components/tags/models', () => ({
-    TagModel: { findAll: jest.fn() },
-}));
+const mockTransaction = jest.fn();
 
-// Получаем типобезопасные ссылки на моки, чтобы TS не ругался
-const mockedArticle = ArticleModel as jest.Mocked<typeof ArticleModel>;
-const mockedTag = TagModel as jest.Mocked<typeof TagModel>;
-const mockedArticleTag = ArticleTagModel as jest.Mocked<typeof ArticleTagModel>;
+describe('CreateArticleService', () => {
+    const createData = {
+        title: 'Test Article',
+        content: 'Test Content',
+        tags: [1, 2],
+    };
 
-describe("CreateArticleService", () => {
-    // Входные данные
-    const dto = { title: 'article title', content: 'article body', tags: [1, 2, 3] };
+    const mockTags = [
+        { id: 1, label: 'Tag1' },
+        { id: 2, label: 'Tag2' },
+    ];
 
-    afterEach(() => {
-        // После каждого теста сброс моков, чтобы тесты были независимыми
+    beforeEach(() => {
         jest.clearAllMocks();
+
+        // mock sequelize transaction
+        (sequelize.transaction as jest.Mock).mockImplementation(async (cb) => {
+            return cb(mockTransaction);
+        });
+
+        // mock tag findAll
+        (TagModel.findAll as jest.Mock).mockResolvedValue(mockTags);
     });
 
-    it("should create an article", async () => {
-        // Формирую «фейковую» статью с минимальным набором полей и кастую в Model,
-        // чтобы соответствовать возвращаемому типу Sequelize, не заморачиваясь с реальными инстансами
-        const fakeArticle = { id: 2, title: dto.title, content: dto.content } as unknown as Model;
+    it('should successfully create an article and produce event', async () => {
+        const mockArticle = {
+            id: 10,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            publishedAt: new Date(),
+        };
 
-        // Мок Tag.findAll делаю так, чтобы он всегда возвращал все теги из dto
-        mockedTag.findAll.mockResolvedValue(dto.tags.map(id => ({ id } as any)));
+        (ArticleModel.findOrCreate as jest.Mock).mockResolvedValue([mockArticle, true]);
+        (ArticleTagModel.bulkCreate as jest.Mock).mockResolvedValue(undefined);
 
-        // Мок Article.findOrCreate возвращает новую статью и флаг created=true, имитируя успешное создание
-        mockedArticle.findOrCreate.mockResolvedValue([fakeArticle, true]);
+        await expect(CreateArticleService(createData)).resolves.toBeUndefined();
 
-        // bulkCreate тоже замокал просто на резолв без данных, нам важен факт вызова
-        mockedArticleTag.bulkCreate.mockResolvedValue([]);
+        expect(TagModel.findAll).toHaveBeenCalledWith({
+            where: { id: { [expect.any(Symbol)]: [1, 2] } },
+        });
 
-        // Вызываю сервис — это реальный вызов, но он работает с моками, без базы
-        await CreateArticleService(dto);
+        expect(ArticleModel.findOrCreate).toHaveBeenCalledWith({
+            where: { title: 'Test Article' },
+            defaults: { title: 'Test Article', content: 'Test Content' },
+            transaction: mockTransaction,
+        });
 
-        // Проверяю, что Tag.findAll вызвался с правильным условием по id с оператором Op.in
-        expect(mockedTag.findAll).toHaveBeenCalledWith(
+        expect(ArticleTagModel.bulkCreate).toHaveBeenCalledWith(
+            [{ articleId: 10, tagId: 1 }, { articleId: 10, tagId: 2 }],
+            { ignoreDuplicates: true, transaction: mockTransaction }
+        );
+
+        expect(articleCreatedHandler).toHaveBeenCalledWith(
             expect.objectContaining({
-                where: expect.objectContaining({
-                    id: { [Op.in]: dto.tags },
-                }),
-            }),
+                id: 10,
+                title: 'Test Article',
+                tags: mockTags.map(t => ({ id: t.id, label: t.label })),
+            })
         );
     });
 
-    it('throws BadRequestError if some tag ids are invalid', async () => {
-        // В этом тесте симулирую ситуацию, когда в базе меньше тегов, чем пришло на вход (2 вместо 3)
-        mockedTag.findAll.mockResolvedValue([{ id: 1 }, { id: 2 }] as any);
+    it('should throw BadRequestError for invalid tag ids', async () => {
+        (TagModel.findAll as jest.Mock).mockResolvedValue([mockTags[0]]); // только один tag
 
-        // Проверяю, что сервис выбросит ошибку BadRequestError
-        await expect(CreateArticleService(dto))
-            .rejects
-            .toBeInstanceOf(BadRequestError);
+        await expect(CreateArticleService(createData)).rejects.toThrow(BadRequestError);
 
-        // И при этом методы Article не должны вызываться, т.к. дальше по логике сервис не пойдёт
-        expect(mockedArticle.findOrCreate).not.toHaveBeenCalled();
-        expect(mockedArticleTag.bulkCreate).not.toHaveBeenCalled();
+        expect(ArticleModel.findOrCreate).not.toHaveBeenCalled();
+        expect(articleCreatedHandler).not.toHaveBeenCalled();
     });
 
-    it('throws ConflictError if article title already exists', async () => {
-        // В этом случае теги все есть
-        mockedTag.findAll.mockResolvedValue(dto.tags.map(id => ({ id } as any)));
+    it('should throw ConflictError if article already exists', async () => {
+        const existingArticle = {
+            id: 5,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            publishedAt: new Date(),
+        };
 
-        // Но Article.findOrCreate возвращает created = false,
-        // чтобы сервис понял, что статья с таким title уже существует и бросил ошибку
-        mockedArticle.findOrCreate.mockResolvedValue([{} as unknown as Model, false]);
+        (ArticleModel.findOrCreate as jest.Mock).mockResolvedValue([existingArticle, false]);
 
-        await expect(CreateArticleService(dto))
-            .rejects
-            .toBeInstanceOf(ConflictError);
+        await expect(CreateArticleService(createData)).rejects.toThrow(ConflictError);
 
-        // bulkCreate не должен вызываться, т.к. статья не создаётся
-        expect(mockedArticleTag.bulkCreate).not.toHaveBeenCalled();
+        expect(articleCreatedHandler).not.toHaveBeenCalled();
+    });
+
+    it('should throw if sequelize transaction fails', async () => {
+        (sequelize.transaction as jest.Mock).mockImplementation(async () => {
+            throw new Error('Transaction failed');
+        });
+
+        await expect(CreateArticleService(createData)).rejects.toThrow('Transaction failed');
+    });
+
+    it('should not call kafka producer if article not created', async () => {
+        (ArticleModel.findOrCreate as jest.Mock).mockResolvedValue([{ id: 1 }, false]);
+
+        await expect(CreateArticleService(createData)).rejects.toThrow(ConflictError);
+
+        expect(articleCreatedHandler).not.toHaveBeenCalled();
     });
 });

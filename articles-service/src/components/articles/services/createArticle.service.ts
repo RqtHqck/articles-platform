@@ -49,9 +49,7 @@ const CreateArticleService = async (
 
         const articleTagsIds = tags.map(tag => ({articleId: article.id, tagId: tag}))
 
-        await ArticleTagModel.bulkCreate(articleTagsIds as TArticleTagsCreation[], { ignoreDuplicates: true, transaction});
-
-
+            await ArticleTagModel.bulkCreate(articleTagsIds as TArticleTagsCreation[], { ignoreDuplicates: true, transaction});
 
         await articleCreatedHandler({
             id: article.id,
