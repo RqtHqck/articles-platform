@@ -3,21 +3,32 @@ services:
     container_name: api-gateway-tester
     build:
       context: ./api-gateway
-    volumes:
-      - ./wait-for.sh:/wait-for.sh  # Монтируем в корень
+    environment:
+      NODE_ENV: test
+    env_file:
+      - ./api-gateway/config/.env.test
     command: npm run test
     networks:
       - test-network
 
+  article-service-tester:
+    container_name: article-service-tester
+    build:
+      context: ./articles-service
+    environment:
+      NODE_ENV: test
+    env_file:
+      - ./articles-service/config/.env.test
+    command: npm run test
+    networks:
+      - test-network
 
 
 networks:
   test-network:
     driver: bridge
 
-#  article-service:
-#    command: ["./wait-for.sh", "article-service", "3001", "npm", "run", "test"]
-#
+
 #  log-service:
 #    command: ["./wait-for.sh", "log-service", "3002", "npm", "run", "test"]
 #

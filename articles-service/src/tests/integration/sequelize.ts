@@ -1,9 +1,9 @@
-import { Sequelize } from 'sequelize-typescript';
+import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
 import ArticleModel from '@components/articles/models/Article.model';
 import TagModel from '@components/tags/models/Tag.model';
 import ArticleTagModel from '@components/articles/models/ArticleTag.model';
 
-const sequelize = new Sequelize({
+const sequelizeOptions: SequelizeOptions = {
     dialect: 'postgres',
     host: process.env.DB_HOST!,
     port: parseInt(process.env.DB_PORT!),
@@ -11,12 +11,9 @@ const sequelize = new Sequelize({
     password: process.env.POSTGRES_PASSWORD!,
     database: process.env.POSTGRES_DB!,
     logging: false,
-    models: [ArticleModel, TagModel, ArticleTagModel],  // Регистрируем модели здесь
-    define: {
-        schema: 'public',       // Указываем схему, если используете не дефолтную
-        underscored: true,      // Чтобы snake_case применялся по умолчанию
-        timestamps: true,       // Чтобы createdAt/updatedAt создавались по умолчанию
-    }
-});
+    models: [ArticleModel, TagModel, ArticleTagModel],
+}
+
+const sequelize = new Sequelize(sequelizeOptions);
 
 export default sequelize;

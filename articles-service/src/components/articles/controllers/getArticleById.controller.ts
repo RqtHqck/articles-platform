@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 import BaseController from "@classes/BaseController";
-import GetArticleByIdService from "../services/getArticleByIdService.service";
+import GetArticleByIdService from "../services/getArticleById.service";
 import logger from "@libs/logger";
 
 class GetArticleByIdController extends BaseController {

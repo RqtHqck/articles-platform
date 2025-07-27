@@ -21,8 +21,6 @@ const GetAllArticlesService = async ({ limit, page }: IGetAllArticlesParams): Pr
         ],
     });
 
-    logger.info(rows);
-
     return {
         page,
         limit,

@@ -9,7 +9,6 @@ import compression from "compression";
 import helmet from "helmet";
 import cors from "cors";
 import {ErrorsHandlerMiddleware} from "@middlewares/ErrorHandler";
-import CreateManyTagsService from "@components/tags/services/createManyTags.service";
 import { router } from "@routes/index"
 
 import '@libs/sequelize';
@@ -33,7 +32,4 @@ app.use(router);
 // Errors
 app.use(ErrorsHandlerMiddleware);
 
-app.listen(process.env.CONTAINER_PORT!, async () => {
-    logger.info(`Article Service running on port ${process.env.CONTAINER_PORT}`);
-    await CreateManyTagsService();
-});
+export default app;

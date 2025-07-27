@@ -15,7 +15,7 @@ services:
       article-service:
         condition: service_started
       log-service:
-        condition: service_started
+        condition: service_started  
       search-service:
         condition: service_started
     restart: no

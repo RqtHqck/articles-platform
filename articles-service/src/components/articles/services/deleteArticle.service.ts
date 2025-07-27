@@ -16,6 +16,7 @@ const DeleteArticleService = async (id: number): Promise<void> => {
             text:`Статья с id=${id} не найдена`
         });
     }
+
     await sequelize.transaction(async (transaction: Transaction): Promise<void> => {
         // Удалить связи с тегами
         await ArticleTagModel.destroy({ where: { articleId: id }, transaction });
