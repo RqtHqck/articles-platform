@@ -10,6 +10,7 @@ import logger from "@libs/logger";
 import {rateLimitOptions} from "@libs/rateLimit";
 import { ErrorsHandlerMiddleware } from '@middlewares/ErrorHandler';
 import {router} from "./routes";
+import {metricsMiddleware} from "@middlewares/metrics.middleware";
 
 const app: Application = express();
 app
@@ -25,6 +26,6 @@ app
 
 app.use(router);
 app.use(ErrorsHandlerMiddleware);
-
+app.use(metricsMiddleware);
 
 export default app;
