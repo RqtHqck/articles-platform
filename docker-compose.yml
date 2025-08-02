@@ -177,37 +177,6 @@ services:
     restart: always
 
 
-  prometheus:
-    container_name: prometheus-service_articles-platform
-    image: prom/prometheus
-    ports:
-      - 9090:9090
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus/rules.yml:/etc/prometheus/rules.yml
-      - prometheus_data:/prometheus
-    restart: always
-
-
-  grafana:
-    container_name: grafana-service_articles-platform
-    image: grafana/grafana:latest
-    ports:
-      - 3005:3000
-    restart: unless-stopped
-    env_file:
-      - ./.env
-    volumes:
-      - grafana_data:/var/lib/grafana
-      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
-      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
-      - ./grafana/dashboards:/etc/grafana/dashboards
-    depends_on:
-      - prometheus
-
-
   kibana:
     container_name: kibana-service_articles-platform
     image: kibana:9.0.3
@@ -253,80 +222,24 @@ services:
       driver: none
 
 
-  cadvisor:
-    container_name: cadvisor-service_articles-platform
-    image: gcr.io/cadvisor/cadvisor:latest
-    ports:
-      - "8080:8080"
-    restart: always
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
-      - /:/rootfs:ro
-      - /var/run:/var/run:rw
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-    devices:
-      - /dev/kmsg:/dev/kmsg
-    depends_on:
-      - api-gateway
-      - article-service
-      - article-service-db
-      - log-service
-      - log-service-db
-      - search-service
-      - elasticsearch
-      - kafka
-
-
-  node-exporter:
-    container_name: node-exporter-service_articles-platform
-    image: prom/node-exporter
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command:
-      - '--path.procfs=/host/proc'
-      - '--path.rootfs=/rootfs'
-      - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
-    ports:
-      - 9100:9100
-
-
-  alert-manager:
-    container_name: alert-manager-service_articles-platform
-    image: prom/alertmanager
-    volumes:
-      - "./alertmanager/alertmanager.yml:/alertmanager/alertmanager.yml"
-      - alertmanager_data:/data
-    env_file:
-      - ./.env
-    ports:
-      - 9093:9093
-
-
-  # portainer:
-  #   image: portainer/portainer-ce:latest
-  #   container_name: portainer
-  #   restart: always
-  #   ports:
-  #     - "9000:9000"
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock   # Доступ к системному Docker
-  #     - portainer_data:/data                        # Хранилище настроек Portainer
-  #   logging:
-  #     driver: none
+#  portainer:
+#   image: portainer/portainer-ce:latest
+#   container_name: portainer
+#   restart: always
+#   ports:
+#     - "9000:9000"
+#   volumes:
+#     - /var/run/docker.sock:/var/run/docker.sock   # Доступ к системному Docker
+#     - portainer_data:/data                        # Хранилище настроек Portainer
+#   logging:
+#     driver: none
 
 
 volumes:
   article_db_data:
   log_db_data:
+  kafka_data:
   elasticsearch_data:
   portainer_data:
-  kafka_data:
   pgadmin:
-  prometheus_data:
-  alertmanager_data:
-  grafana_data:
+

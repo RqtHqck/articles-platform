@@ -9,6 +9,7 @@ import compression from "compression";
 import helmet from "helmet";
 import cors from "cors";
 import {ErrorsHandlerMiddleware} from "@middlewares/ErrorHandler";
+import {metricsMiddleware} from "@middlewares/metrics.middleware";
 import { router } from "@routes/index"
 
 import '@libs/sequelize';
@@ -27,9 +28,8 @@ app
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
     }))
 
-// Routes
 app.use(router);
-// Errors
 app.use(ErrorsHandlerMiddleware);
+app.use(metricsMiddleware);
 
 export default app;

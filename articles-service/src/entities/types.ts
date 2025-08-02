@@ -23,4 +23,6 @@ export type GetAllArticlesControllerResponse = {
     articles: IArticle[]
 }
 
+export type TLabel = Partial<Record<string, string | number>>
+
 export { TError, TErrorData };

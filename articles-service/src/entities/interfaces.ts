@@ -43,3 +43,10 @@ export interface ILog {
     message: string;
     createdAt: Date;
 }
+
+export interface ILabel {
+    method: string;
+    route: string;
+    status: string;
+    status_сode: string;
+}

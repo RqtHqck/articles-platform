@@ -1,0 +1,125 @@
+services:
+
+  prometheus:
+    container_name: prometheus-service_articles-platform
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/rules.yml:/etc/prometheus/rules.yml
+      - prometheus_data:/prometheus
+    restart: always
+
+
+#  grafana:
+#    container_name: grafana-service_articles-platform
+#    image: grafana/grafana:latest
+#    ports:
+#      - 3005:3000
+#    restart: unless-stopped
+#    env_file:
+#      - ./.env
+#    volumes:
+#      - grafana_data:/var/lib/grafana
+#      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+#      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+#      - ./grafana/dashboards:/etc/grafana/dashboards
+#    depends_on:
+#      - prometheus
+
+
+  # for containers monitoring
+  cadvisor:
+    container_name: cadvisor-service_articles-platform
+    image: gcr.io/cadvisor/cadvisor:latest
+    ports:
+      - "8080:8080"
+    restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    devices:
+      - /dev/kmsg:/dev/kmsg
+
+
+  # for host system monitoring
+  node-exporter:
+    container_name: node-exporter-service_articles-platform
+    image: prom/node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    ports:
+      - 9100:9100
+
+
+  # alert manager
+  alert-manager:
+    container_name: alert-manager-service_articles-platform
+    image: prom/alertmanager
+    volumes:
+      - "./alertmanager/alertmanager.yml:/alertmanager/alertmanager.yml"
+      - alertmanager_data:/data
+    env_file:
+      - ./.env
+    ports:
+      - 9093:9093
+
+
+  kafka-exporter:
+    container_name: kafka-exporter_articles-platform
+    image: danielqsj/kafka-exporter:latest
+    restart: always
+    ports:
+      - "9308:9308"
+    environment:
+      KAFKA_SERVER: kafka:9092
+
+
+  elasticsearch-exporter:
+    container_name: elasticsearch-exporter_articles-platform
+    image: quay.io/prometheuscommunity/elasticsearch-exporter:latest
+    restart: always
+    ports:
+      - "9114:9114"
+    command:
+      - '--es.uri=http://elasticsearch:9200'
+
+  article-postgres-exporter:
+    container_name: article-postgres-exporter_articles-platform
+    image: prometheuscommunity/postgres-exporter:latest
+    environment:
+      DATA_SOURCE_NAME: ${DATA_SOURCE_NAME_ARTICLE}
+    ports:
+      - "9187:9187"
+
+
+  log-postgres-exporter:
+    container_name: log-postgres-exporter_articles-platform
+    image: prometheuscommunity/postgres-exporter:latest
+    environment:
+      DATA_SOURCE_NAME: ${DATA_SOURCE_NAME_LOG}
+    ports:
+      - "9188:9187"
+
+
+networks:
+  monitoring:
+
+volumes:
+  prometheus_data:
+  alertmanager_data:
+#  grafana_data:

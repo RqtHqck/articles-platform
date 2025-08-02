@@ -21,7 +21,7 @@ export const metricsMiddleware = (req: Request, res: Response, next: NextFunctio
         const labels: TLabel = {
             method: req.method,
             route: path,
-            status_code: String(res.statusCode || 200),
+            status_сode: String(res.statusCode || 200),
             status: normalizedStatusCode,
         };
 
